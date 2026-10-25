@@ -1,56 +1,50 @@
-# Welcome to your Expo app 👋
+# Lona
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Lona is a friendly lending app that makes it easy to lend money to friends and keep track of it. Users can send loans to people they know, see what's owed, and settle up through the platform, without the awkward follow-ups.
 
-## Get started
+> **Status:** Early development. Features and documentation will be expanded as the project takes shape.
+
+## Tech stack
+
+- [Expo](https://expo.dev) (React Native) for iOS, Android, and web
+- [Expo Router](https://docs.expo.dev/router/introduction) for file-based navigation
+- TypeScript
+- ESLint + Prettier
+
+## Getting started
 
 1. Install dependencies
 
    ```bash
-   npm install
+   pnpm install
    ```
 
-2. Start the app
+2. Start the development server
 
    ```bash
-   npx expo start
+   pnpm start
    ```
 
-In the output, you'll find options to open the app in a
+   From there you can open the app in a [development build](https://docs.expo.dev/develop/development-builds/introduction/), an Android emulator, an iOS simulator, or [Expo Go](https://expo.dev/go).
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Scripts
 
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+| Command             | Description                      |
+| ------------------- | -------------------------------- |
+| `pnpm start`        | Start the Expo dev server        |
+| `pnpm ios`          | Start on iOS                     |
+| `pnpm android`      | Start on Android                 |
+| `pnpm web`          | Start on web                     |
+| `pnpm lint`         | Lint the project                 |
+| `pnpm lint:fix`     | Lint and auto-fix issues         |
+| `pnpm format`       | Format all files with Prettier   |
+| `pnpm format:check` | Check formatting without writing |
+| `pnpm typecheck`    | Run the TypeScript compiler      |
 
-## Get a fresh project
+## Project structure
 
-When you're ready, run:
-
-```bash
-npm run reset-project
 ```
-
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
-
-### Other setup steps
-
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+src/
+  app/        # Screens and layouts (Expo Router)
+assets/       # Images, icons, and fonts
+```

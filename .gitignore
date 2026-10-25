@@ -44,3 +44,5 @@ example
 
 # Claude Code local settings
 .claude/settings.local.json
+# Local-only notes and runbooks (not shared)
+.claude/local/

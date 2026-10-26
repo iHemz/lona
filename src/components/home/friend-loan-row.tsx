@@ -1,28 +1,11 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { Avatar, DEFAULT_AVATAR_SIZE } from "@/components/ui/avatar";
-import { FontSize, Spacing, type ThemeColors } from "@/constants/theme";
+import { FontSize, Spacing } from "@/constants/theme";
+import { toneColor } from "@/constants/tone";
 import { useThemeColors } from "@/hooks/use-theme";
-import {
-  describeDueStatus,
-  pluraliseLoans,
-  type FriendLoanSummary,
-  type StatusTone,
-} from "@/lib/loans";
+import { describeDueStatus, pluraliseLoans, type FriendLoanSummary } from "@/lib/loans";
 import { formatMoney } from "@/lib/money";
-
-function toneColor(tone: StatusTone, colors: ThemeColors): string {
-  switch (tone) {
-    case "danger":
-      return colors.danger;
-    case "warning":
-      return colors.warning;
-    case "success":
-      return colors.success;
-    case "neutral":
-      return colors.textSecondary;
-  }
-}
 
 /** Left inset for separators so they line up with the text, not the avatar. */
 export const FRIEND_ROW_SEPARATOR_INSET = Spacing.lg + DEFAULT_AVATAR_SIZE + Spacing.md;

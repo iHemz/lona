@@ -1,6 +1,5 @@
 import { useRouter } from "expo-router";
-import { Platform, ScrollView, StyleSheet } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ScrollView, StyleSheet } from "react-native";
 
 import { BalanceSummary } from "@/components/home/balance-summary";
 import { FeaturedLoanCard } from "@/components/home/featured-loan-card";
@@ -10,16 +9,13 @@ import { HomeHeader } from "@/components/home/home-header";
 import { RecentLoans } from "@/components/home/recent-loans";
 import { Spacing } from "@/constants/theme";
 import { useHomeDashboard } from "@/hooks/use-home-dashboard";
+import { useScreenTopPadding } from "@/hooks/use-screen-top-padding";
 import { useThemeColors } from "@/hooks/use-theme";
 import { MOCK_CURRENT_USER } from "@/lib/mock-data";
 
-// iOS applies safe-area insets to the scroll view itself (contentInsetAdjustmentBehavior);
-// Android and web need them as padding.
-const appliesSafeAreaAutomatically = Platform.OS === "ios";
-
 export default function HomeScreen() {
   const colors = useThemeColors();
-  const insets = useSafeAreaInsets();
+  const topPadding = useScreenTopPadding();
   const router = useRouter();
   const { owedToYou, youOwe, featured, recentLoans } = useHomeDashboard();
 
@@ -27,10 +23,7 @@ export default function HomeScreen() {
     <ScrollView
       style={{ backgroundColor: colors.background }}
       contentInsetAdjustmentBehavior="automatic"
-      contentContainerStyle={[
-        styles.content,
-        !appliesSafeAreaAutomatically && { paddingTop: insets.top + Spacing.sm },
-      ]}
+      contentContainerStyle={[styles.content, { paddingTop: topPadding }]}
     >
       <HomeHeader user={MOCK_CURRENT_USER} />
       <BalanceSummary owedToYou={owedToYou} youOwe={youOwe} />
@@ -44,7 +37,13 @@ export default function HomeScreen() {
       ) : (
         <FeaturedLoanEmpty />
       )}
-      <RecentLoans summaries={recentLoans} onSeeAll={() => router.navigate("/loans")} />
+      <RecentLoans
+        summaries={recentLoans}
+        onSeeAll={() => router.navigate("/loans")}
+        onOpenFriend={(friendId) =>
+          router.push({ pathname: "/friend/[id]", params: { id: friendId } })
+        }
+      />
     </ScrollView>
   );
 }

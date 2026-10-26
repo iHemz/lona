@@ -13,6 +13,21 @@ export type Ledger = {
   currency: CurrencyCode;
 };
 
+export type FriendLedger = Omit<Ledger, "friends"> & {
+  /** Null when no friend has this id (e.g. a stale link). */
+  friend: Friend | null;
+};
+
+/** One friend and only the loans you share with them. */
+export function useFriendLedger(friendId: string): FriendLedger {
+  const { friends, loans, ...rest } = useLedger();
+  return {
+    ...rest,
+    friend: friends.find((candidate) => candidate.id === friendId) ?? null,
+    loans: loans.filter((loan) => loan.friendId === friendId),
+  };
+}
+
 /** The current user's friends and loans. Mock data for now. */
 export function useLedger(): Ledger {
   const today = todayIsoDate();

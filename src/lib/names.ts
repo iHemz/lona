@@ -10,6 +10,11 @@ export function initials(name: string): string {
   return (first + last).toUpperCase();
 }
 
+/** "John Doe" → "John" */
+export function firstName(name: string): string {
+  return nameParts(name)[0] ?? name;
+}
+
 /** "Sasha Bello" → "Sasha B." */
 export function shortName(name: string): string {
   const parts = nameParts(name);

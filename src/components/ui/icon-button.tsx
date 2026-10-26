@@ -9,8 +9,10 @@ type IconButtonProps = {
   accessibilityLabel: string;
   onPress?: () => void;
   size?: number;
-  /** Icon colour; defaults to the primary text colour. */
+  /** Icon colour; defaults to the primary text colour (or white on `primary`). */
   tintColor?: ColorValue;
+  /** `surface` is the outlined default; `primary` is a filled call to action. */
+  variant?: "surface" | "primary";
 };
 
 export function IconButton({
@@ -19,8 +21,10 @@ export function IconButton({
   onPress,
   size = TouchTarget,
   tintColor,
+  variant = "surface",
 }: IconButtonProps) {
   const colors = useThemeColors();
+  const isPrimary = variant === "primary";
 
   return (
     <Pressable
@@ -33,13 +37,17 @@ export function IconButton({
           width: size,
           height: size,
           borderRadius: size / 2,
-          backgroundColor: colors.surface,
-          borderColor: colors.surfaceBorder,
+          backgroundColor: isPrimary ? colors.primary : colors.surface,
+          borderColor: isPrimary ? colors.primary : colors.surfaceBorder,
         },
         pressed && styles.pressed,
       ]}
     >
-      <SymbolView name={icon} size={size * 0.45} tintColor={tintColor ?? colors.text} />
+      <SymbolView
+        name={icon}
+        size={size * 0.45}
+        tintColor={tintColor ?? (isPrimary ? colors.onPrimary : colors.text)}
+      />
     </Pressable>
   );
 }

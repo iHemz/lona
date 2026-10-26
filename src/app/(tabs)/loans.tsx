@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, View } from "react-native";
 import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
@@ -13,12 +14,9 @@ import { SearchBar } from "@/components/ui/search-bar";
 import { FontSize, Spacing } from "@/constants/theme";
 import { useKeyboardVisible } from "@/hooks/use-keyboard-visible";
 import { useLedger } from "@/hooks/use-ledger";
+import { useScreenTopPadding } from "@/hooks/use-screen-top-padding";
 import { useThemeColors } from "@/hooks/use-theme";
 import { buildLoanTabs, filterBySearch, LOAN_TABS, type LoanTab } from "@/lib/loans-list";
-
-// iOS applies safe-area insets to the list itself (contentInsetAdjustmentBehavior);
-// Android and web need the top inset as padding.
-const appliesSafeAreaAutomatically = Platform.OS === "ios";
 
 // A provider inside the tab measures insets from the screen's own position, so on iOS the
 // bottom inset includes the floating tab bar and the search bar sits just above it.
@@ -33,6 +31,8 @@ export default function LoansScreen() {
 function LoansScreenContent() {
   const colors = useThemeColors();
   const insets = useSafeAreaInsets();
+  const topPadding = useScreenTopPadding();
+  const router = useRouter();
   const isKeyboardVisible = useKeyboardVisible();
   const tabs = buildLoanTabs(useLedger());
   const [selectedTab, setSelectedTab] = useState<LoanTab>("lent");
@@ -52,7 +52,12 @@ function LoansScreenContent() {
         keyExtractor={(row) => row.key}
         renderItem={({ item, index }) => (
           <GroupedRow index={index} count={rows.length}>
-            <FriendLoanRow summary={item} />
+            <FriendLoanRow
+              summary={item}
+              onPress={() =>
+                router.push({ pathname: "/friend/[id]", params: { id: item.friend.id } })
+              }
+            />
           </GroupedRow>
         )}
         ItemSeparatorComponent={() => <GroupedSeparator inset={FRIEND_ROW_SEPARATOR_INSET} />}
@@ -91,10 +96,7 @@ function LoansScreenContent() {
           )
         }
         contentInsetAdjustmentBehavior="automatic"
-        contentContainerStyle={[
-          styles.content,
-          !appliesSafeAreaAutomatically && { paddingTop: insets.top + Spacing.sm },
-        ]}
+        contentContainerStyle={[styles.content, { paddingTop: topPadding }]}
         keyboardShouldPersistTaps="handled"
         keyboardDismissMode="on-drag"
       />

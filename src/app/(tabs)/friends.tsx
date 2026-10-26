@@ -1,6 +1,6 @@
+import { useRouter } from "expo-router";
 import { useState } from "react";
-import { FlatList, Platform, StyleSheet, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 
 import { FRIEND_ROW_INSET, FriendRow } from "@/components/friends/friend-row";
 import { FriendsIllustration } from "@/components/friends/friends-illustration";
@@ -11,6 +11,7 @@ import { IconButton } from "@/components/ui/icon-button";
 import { SearchBar } from "@/components/ui/search-bar";
 import { FontSize, Spacing } from "@/constants/theme";
 import { useLedger } from "@/hooks/use-ledger";
+import { useScreenTopPadding } from "@/hooks/use-screen-top-padding";
 import { useThemeColors } from "@/hooks/use-theme";
 import { friendsWithLoans } from "@/lib/friends";
 import { matchesName } from "@/lib/names";
@@ -21,13 +22,10 @@ const ADD_FRIEND_ICON = {
   web: "person_add",
 } as const;
 
-// iOS applies safe-area insets to the list itself (contentInsetAdjustmentBehavior);
-// Android and web need the top inset as padding.
-const appliesSafeAreaAutomatically = Platform.OS === "ios";
-
 export default function FriendsScreen() {
   const colors = useThemeColors();
-  const insets = useSafeAreaInsets();
+  const topPadding = useScreenTopPadding();
+  const router = useRouter();
   const { friends, loans, today } = useLedger();
   const [query, setQuery] = useState("");
 
@@ -41,7 +39,11 @@ export default function FriendsScreen() {
       keyExtractor={(friend) => friend.id}
       renderItem={({ item, index }) => (
         <GroupedRow index={index} count={rows.length}>
-          <FriendRow friend={item} today={today} />
+          <FriendRow
+            friend={item}
+            today={today}
+            onPress={() => router.push({ pathname: "/friend/[id]", params: { id: item.id } })}
+          />
         </GroupedRow>
       )}
       ItemSeparatorComponent={() => <GroupedSeparator inset={FRIEND_ROW_INSET} />}
@@ -89,10 +91,7 @@ export default function FriendsScreen() {
         )
       }
       contentInsetAdjustmentBehavior="automatic"
-      contentContainerStyle={[
-        styles.content,
-        !appliesSafeAreaAutomatically && { paddingTop: insets.top + Spacing.sm },
-      ]}
+      contentContainerStyle={[styles.content, { paddingTop: topPadding }]}
       keyboardShouldPersistTaps="handled"
       keyboardDismissMode="on-drag"
     />

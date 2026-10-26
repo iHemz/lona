@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { FontSize, Spacing } from "@/constants/theme";
 import { formatCountdown, useCountdown } from "@/hooks/use-countdown";
 import { useOnboarding } from "@/hooks/use-onboarding";
+import { useSetup } from "@/hooks/use-setup";
 import { useThemeColors } from "@/hooks/use-theme";
 import { sendVerificationCode, VERIFICATION_CODE_LENGTH, verifyCode } from "@/lib/mock-auth";
 import {
@@ -24,6 +25,7 @@ const RESEND_AFTER_SECONDS = 30;
 export default function VerifyScreen() {
   const colors = useThemeColors();
   const { completeOnboarding } = useOnboarding();
+  const { completeTask } = useSetup();
   const params = useLocalSearchParams<{ country?: string; digits?: string }>();
   const country =
     COUNTRIES.find((candidate) => candidate.code === params.country) ?? DEFAULT_COUNTRY;
@@ -43,6 +45,7 @@ export default function VerifyScreen() {
     setError(null);
     try {
       if (await verifyCode(phone, code)) {
+        completeTask("phone");
         // The root guard swaps the welcome flow for the app once this is set.
         completeOnboarding();
       } else {

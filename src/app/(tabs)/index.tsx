@@ -7,11 +7,15 @@ import { FeaturedLoanEmpty } from "@/components/home/featured-loan-empty";
 import { HomeActions } from "@/components/home/home-actions";
 import { HomeHeader } from "@/components/home/home-header";
 import { RecentLoans } from "@/components/home/recent-loans";
+import { OptionalSetup } from "@/components/setup/optional-setup";
+import { SetupChecklist } from "@/components/setup/setup-checklist";
 import { Spacing } from "@/constants/theme";
 import { useHomeDashboard } from "@/hooks/use-home-dashboard";
 import { useAccount } from "@/hooks/use-ledger";
 import { useScreenTopPadding } from "@/hooks/use-screen-top-padding";
+import { useSetup } from "@/hooks/use-setup";
 import { useThemeColors } from "@/hooks/use-theme";
+import { canMoveMoney, isSetupComplete } from "@/lib/setup";
 
 export default function HomeScreen() {
   const colors = useThemeColors();
@@ -19,6 +23,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const account = useAccount();
   const { owedToYou, youOwe, featured, recentLoans } = useHomeDashboard();
+  const { completed } = useSetup();
 
   return (
     <ScrollView
@@ -32,23 +37,36 @@ export default function HomeScreen() {
         onOpenSettings={() => router.push("/settings")}
       />
       <BalanceSummary owedToYou={owedToYou} youOwe={youOwe} />
-      <HomeActions />
-      {featured ? (
-        <FeaturedLoanCard
-          loan={featured.loan}
-          friend={featured.friend}
-          isOverdue={featured.isOverdue}
-        />
+      <HomeActions canRequestLoan={canMoveMoney(completed)} />
+      {/* Setup takes precedence over the dashboard until it's finished. */}
+      {isSetupComplete(completed) ? (
+        <>
+          {featured ? (
+            <FeaturedLoanCard
+              loan={featured.loan}
+              friend={featured.friend}
+              isOverdue={featured.isOverdue}
+            />
+          ) : (
+            <FeaturedLoanEmpty />
+          )}
+          <RecentLoans
+            summaries={recentLoans}
+            onSeeAll={() => router.navigate("/loans")}
+            onOpenFriend={(friendId) =>
+              router.push({ pathname: "/friend/[id]", params: { id: friendId } })
+            }
+          />
+        </>
       ) : (
-        <FeaturedLoanEmpty />
+        <>
+          <SetupChecklist
+            completed={completed}
+            onStartTask={{ id: () => router.push("/verify-id") }}
+          />
+          <OptionalSetup />
+        </>
       )}
-      <RecentLoans
-        summaries={recentLoans}
-        onSeeAll={() => router.navigate("/loans")}
-        onOpenFriend={(friendId) =>
-          router.push({ pathname: "/friend/[id]", params: { id: friendId } })
-        }
-      />
     </ScrollView>
   );
 }

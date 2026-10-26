@@ -12,7 +12,7 @@ import {
 import { FontSize, Radius, Spacing, TouchTarget, type ThemeColors } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
 
-type ButtonVariant = "primary" | "inverse" | "outline";
+type ButtonVariant = "primary" | "inverse" | "outline" | "secondary";
 type ButtonSize = "large" | "compact";
 
 export type ButtonProps = {
@@ -20,7 +20,8 @@ export type ButtonProps = {
   onPress?: () => void;
   /**
    * `primary` for the main call to action, `inverse` for high-contrast secondary actions,
-   * `outline` for equal-weight alternatives (e.g. other sign-in options).
+   * `outline` for equal-weight alternatives (e.g. other sign-in options), `secondary` for a
+   * quiet alternative next to a primary action (e.g. "Later").
    */
   variant?: ButtonVariant;
   size?: ButtonSize;
@@ -43,6 +44,12 @@ function variantColors(variant: ButtonVariant, colors: ThemeColors) {
       return { background: colors.inverse, foreground: colors.onInverse, border: colors.inverse };
     case "outline":
       return { background: "transparent", foreground: colors.text, border: colors.outlineBorder };
+    case "secondary":
+      return {
+        background: colors.surface,
+        foreground: colors.textSecondary,
+        border: colors.surface,
+      };
   }
 }
 

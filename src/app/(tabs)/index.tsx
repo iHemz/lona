@@ -62,7 +62,10 @@ export default function HomeScreen() {
         <>
           <SetupChecklist
             completed={completed}
-            onStartTask={{ id: () => router.push("/verify-id") }}
+            onStartTask={{
+              id: () => router.push("/verify-id"),
+              payment: () => router.push("/link-payment"),
+            }}
           />
           <OptionalSetup />
         </>

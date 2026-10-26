@@ -9,8 +9,9 @@ export const MOCK_ACCOUNT: Account = {
   user: MOCK_CURRENT_USER,
   isVerified: true,
   contactVerified: true,
-  card: { last4: "4242" },
-  bank: { name: "Lloyds", last4: "8974" },
+  // Filled in from linked payment methods (see useAccount).
+  card: null,
+  bank: null,
 };
 
 export type MockScenario = "populated" | "empty";

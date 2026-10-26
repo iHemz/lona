@@ -1,5 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
+
+import { usePersistedState } from "@/hooks/use-persisted-state";
 
 // Not sensitive (just "has this device seen onboarding"), so AsyncStorage rather than secure-store.
 const STORAGE_KEY = "lona.onboarding.completed";
@@ -20,46 +21,23 @@ const OnboardingContext = createContext<OnboardingContextValue>({
   resetOnboarding: () => {},
 });
 
-async function persist(completed: boolean): Promise<void> {
-  try {
-    if (completed) await AsyncStorage.setItem(STORAGE_KEY, "true");
-    else await AsyncStorage.removeItem(STORAGE_KEY);
-  } catch (error) {
-    // Losing the flag only means onboarding shows again; don't block the user.
-    console.warn("Couldn't save onboarding state", error);
-  }
-}
+const booleanCodec = {
+  parse: (stored: string) => stored === "true",
+  serialize: (value: boolean) => String(value),
+};
 
 export function OnboardingProvider({ children }: { children: ReactNode }) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [hasOnboarded, setHasOnboarded] = useState(false);
-
-  useEffect(() => {
-    let isActive = true;
-    AsyncStorage.getItem(STORAGE_KEY)
-      .then((value) => {
-        if (isActive) setHasOnboarded(value === "true");
-      })
-      .catch((error) => console.warn("Couldn't read onboarding state", error))
-      .finally(() => {
-        if (isActive) setIsLoaded(true);
-      });
-    return () => {
-      isActive = false;
-    };
-  }, []);
+  const [hasOnboarded, setHasOnboarded, isLoaded] = usePersistedState(
+    STORAGE_KEY,
+    false,
+    booleanCodec,
+  );
 
   const value: OnboardingContextValue = {
     isLoaded,
     hasOnboarded,
-    completeOnboarding: () => {
-      setHasOnboarded(true);
-      void persist(true);
-    },
-    resetOnboarding: () => {
-      setHasOnboarded(false);
-      void persist(false);
-    },
+    completeOnboarding: () => setHasOnboarded(true),
+    resetOnboarding: () => setHasOnboarded(false),
   };
 
   return <OnboardingContext.Provider value={value}>{children}</OnboardingContext.Provider>;

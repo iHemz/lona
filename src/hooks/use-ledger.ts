@@ -1,3 +1,4 @@
+import { usePaymentMethods } from "@/hooks/use-payment-methods";
 import type { Account } from "@/lib/account";
 import type { ActivityEvent } from "@/lib/activity";
 import { todayIsoDate, type IsoDate } from "@/lib/dates";
@@ -39,7 +40,8 @@ export function useLedger(): Ledger {
   return { friends, loans, activity, today, currency: HOME_CURRENCY };
 }
 
-/** The signed-in user's account. Mock data for now. */
+/** The signed-in user's account. Mock profile, with the card and bank they've actually linked. */
 export function useAccount(): Account {
-  return MOCK_ACCOUNT;
+  const { card, bank } = usePaymentMethods();
+  return { ...MOCK_ACCOUNT, card, bank };
 }

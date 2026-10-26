@@ -28,9 +28,7 @@ export function BalanceSummary({ owedToYou, youOwe }: BalanceSummaryProps) {
       </Text>
       <View style={styles.youOweRow}>
         <Text style={[styles.youOweLabel, { color: colors.textSecondary }]}>You owe</Text>
-        <Text
-          style={[styles.youOweAmount, { color: hasDebt ? colors.danger : colors.textSecondary }]}
-        >
+        <Text style={[styles.youOweAmount, { color: hasDebt ? colors.danger : colors.text }]}>
           {youOweLabel}
         </Text>
       </View>

@@ -1,6 +1,7 @@
 import { SymbolView } from "expo-symbols";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
+import { FeaturedCardSurface } from "@/components/home/featured-card-surface";
 import { InstalmentProgress } from "@/components/home/instalment-progress";
 import { FontSize, Radius, Spacing, TouchTarget } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
@@ -42,12 +43,7 @@ export function FeaturedLoanCard({
     : { label: "Active", color: colors.success, background: colors.successSurface };
 
   return (
-    <View
-      style={[
-        styles.card,
-        { backgroundColor: colors.featuredSurface, borderColor: colors.featuredBorder },
-      ]}
-    >
+    <FeaturedCardSurface>
       <View style={styles.headerRow}>
         <Text style={[styles.eyebrow, { color: colors.textSecondary }]}>Featured loan</Text>
         <View
@@ -91,17 +87,11 @@ export function FeaturedLoanCard({
           tintColor={colors.textSecondary}
         />
       </Pressable>
-    </View>
+    </FeaturedCardSurface>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
-    borderRadius: Radius.lg,
-    borderWidth: StyleSheet.hairlineWidth,
-    padding: Spacing.xl,
-    gap: Spacing.xl,
-  },
   headerRow: {
     flexDirection: "row",
     alignItems: "center",

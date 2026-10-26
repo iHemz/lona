@@ -20,6 +20,18 @@ const light = {
   featuredBorder: "#DCE6F5",
   progressTrack: "#D1D5DB",
   progressContainer: "#FFFFFF",
+  inverse: "#111111",
+  onInverse: "#FFFFFF",
+  linkSurface: "#E4ECF8",
+  illustrationPaper: "#FFFFFF",
+  illustrationPhoto: "#D9E6F8",
+  illustrationIcon: "#7FA5DB",
+  illustrationInk: "#4A4A50",
+  illustrationLine: "#ECECF0",
+  illustrationDotWarm: "#F5C6A5",
+  illustrationDotCool: "#BFE3C8",
+  illustrationDash: "#AEB4BE",
+  illustrationShadow: "rgba(17, 17, 17, 0.14)",
 };
 
 export type ThemeColors = typeof light;
@@ -45,6 +57,18 @@ const dark: ThemeColors = {
   featuredBorder: "#1F3556",
   progressTrack: "#3A3A3C",
   progressContainer: "#2C2C2E",
+  inverse: "#FFFFFF",
+  onInverse: "#111111",
+  linkSurface: "#1A2F4D",
+  illustrationPaper: "#2C2C2E",
+  illustrationPhoto: "#1F3556",
+  illustrationIcon: "#7FA5DB",
+  illustrationInk: "#C7C7CC",
+  illustrationLine: "#3A3A3C",
+  illustrationDotWarm: "#B5835F",
+  illustrationDotCool: "#5E9A6D",
+  illustrationDash: "#636366",
+  illustrationShadow: "rgba(0, 0, 0, 0.6)",
 };
 
 export const Colors = { light, dark };
@@ -75,6 +99,7 @@ export const FontSize = {
   footnote: 13,
   subhead: 15,
   body: 17,
+  heading: 20,
   title: 24,
   balanceFraction: 28,
   balance: 44,

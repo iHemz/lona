@@ -3,9 +3,18 @@ import type { Friend, Loan } from "@/lib/loans";
 
 export const MOCK_CURRENT_USER: Friend = { id: "me", name: "Ade Lawal" };
 
+export type MockScenario = "populated" | "empty";
+
+/** Preview the empty states with `EXPO_PUBLIC_MOCK_SCENARIO=empty` (e.g. in `.env.local`). */
+export const MOCK_SCENARIO: MockScenario =
+  process.env.EXPO_PUBLIC_MOCK_SCENARIO === "empty" ? "empty" : "populated";
+
 // Stand-in data until there's a backend. Dates are relative to `today` so due/late
 // labels stay meaningful whenever the app is run.
-export function createMockLedger(today: IsoDate): { friends: Friend[]; loans: Loan[] } {
+export function createMockLedger(
+  today: IsoDate,
+  scenario: MockScenario = MOCK_SCENARIO,
+): { friends: Friend[]; loans: Loan[] } {
   const on = (days: number) => addDays(today, days);
 
   const friends: Friend[] = [
@@ -107,5 +116,5 @@ export function createMockLedger(today: IsoDate): { friends: Friend[]; loans: Lo
     },
   ];
 
-  return { friends, loans };
+  return { friends, loans: scenario === "empty" ? [] : loans };
 }

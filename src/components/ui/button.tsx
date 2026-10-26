@@ -28,6 +28,8 @@ export type ButtonProps = {
   icon?: SymbolViewProps["name"];
   /** A custom leading element (e.g. a brand logo) when a symbol won't do; replaces `icon`. */
   leading?: ReactNode;
+  /** A symbol after the label, e.g. an arrow for "Go to bank →". */
+  trailingIcon?: SymbolViewProps["name"];
   disabled?: boolean;
   /** Shows a spinner in place of the icon and blocks presses, e.g. while a request runs. */
   isLoading?: boolean;
@@ -60,6 +62,7 @@ export function Button({
   size = "large",
   icon,
   leading,
+  trailingIcon,
   disabled = false,
   isLoading = false,
   style,
@@ -92,6 +95,9 @@ export function Button({
       >
         {label}
       </Text>
+      {trailingIcon && !isLoading && (
+        <SymbolView name={trailingIcon} size={18} tintColor={foreground} />
+      )}
     </Pressable>
   );
 }

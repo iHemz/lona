@@ -1,6 +1,6 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 
+import { usePersistedState } from "@/hooks/use-persisted-state";
 import { SETUP_TASKS, type SetupTaskId } from "@/lib/setup";
 
 // Device-local until there's a backend; the server will own this once accounts exist.
@@ -25,43 +25,21 @@ const SetupContext = createContext<SetupContextValue>({
 
 const KNOWN_IDS = new Set<string>(SETUP_TASKS.map((task) => task.id));
 
-function parse(stored: string | null): Set<SetupTaskId> {
-  if (!stored) return new Set();
-  try {
+const taskSetCodec = {
+  parse: (stored: string): Set<SetupTaskId> => {
     const ids: unknown = JSON.parse(stored);
     if (!Array.isArray(ids)) return new Set();
     return new Set(ids.filter((id): id is SetupTaskId => KNOWN_IDS.has(id)));
-  } catch {
-    return new Set();
-  }
-}
+  },
+  serialize: (completed: Set<SetupTaskId>) => JSON.stringify([...completed]),
+};
 
 export function SetupProvider({ children }: { children: ReactNode }) {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [completed, setCompleted] = useState<Set<SetupTaskId>>(new Set());
-
-  useEffect(() => {
-    let isActive = true;
-    AsyncStorage.getItem(STORAGE_KEY)
-      .then((stored) => {
-        if (isActive) setCompleted(parse(stored));
-      })
-      .catch((error) => console.warn("Couldn't read setup progress", error))
-      .finally(() => {
-        if (isActive) setIsLoaded(true);
-      });
-    return () => {
-      isActive = false;
-    };
-  }, []);
-
-  // Save after every change once the stored value has been read (never overwrite it first).
-  useEffect(() => {
-    if (!isLoaded) return;
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([...completed])).catch((error) =>
-      console.warn("Couldn't save setup progress", error),
-    );
-  }, [completed, isLoaded]);
+  const [completed, setCompleted, isLoaded] = usePersistedState(
+    STORAGE_KEY,
+    new Set<SetupTaskId>(),
+    taskSetCodec,
+  );
 
   const value: SetupContextValue = {
     isLoaded,

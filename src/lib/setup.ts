@@ -37,7 +37,7 @@ export function isSetupComplete(completed: ReadonlySet<SetupTaskId>): boolean {
   return done === total;
 }
 
-/** Sending or requesting money needs a verified identity. */
+/** Sending or requesting money needs every setup task done ("Needed before you can send or request money"). */
 export function canMoveMoney(completed: ReadonlySet<SetupTaskId>): boolean {
-  return completed.has("id");
+  return isSetupComplete(completed);
 }

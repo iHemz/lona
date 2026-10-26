@@ -9,6 +9,7 @@ import { FontSize, Spacing } from "@/constants/theme";
 import { useAppearancePicker } from "@/hooks/use-appearance-picker";
 import { useAccount } from "@/hooks/use-ledger";
 import { useOnboarding } from "@/hooks/use-onboarding";
+import { usePaymentMethods } from "@/hooks/use-payment-methods";
 import { useScreenTopPadding } from "@/hooks/use-screen-top-padding";
 import { useSetup } from "@/hooks/use-setup";
 import { useThemeColors } from "@/hooks/use-theme";
@@ -26,6 +27,7 @@ export default function SettingsScreen() {
   const openAppearancePicker = useAppearancePicker();
   const { resetOnboarding } = useOnboarding();
   const setup = useSetup();
+  const paymentMethods = usePaymentMethods();
   // TODO: wire to biometric auth and persist once those exist; local state for now.
   const [biometricsEnabled, setBiometricsEnabled] = useState(true);
 
@@ -116,6 +118,7 @@ export default function SettingsScreen() {
               trailing: "none",
               onPress: () => {
                 setup.reset();
+                paymentMethods.reset();
                 resetOnboarding();
               },
             },

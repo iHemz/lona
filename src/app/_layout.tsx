@@ -3,6 +3,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
 import { OnboardingProvider, useOnboarding } from "@/hooks/use-onboarding";
+import { PaymentMethodsProvider, usePaymentMethods } from "@/hooks/use-payment-methods";
 import { SetupProvider, useSetup } from "@/hooks/use-setup";
 import { ThemePreferenceProvider } from "@/hooks/use-theme-preference";
 
@@ -15,7 +16,9 @@ export default function RootLayout() {
     <ThemePreferenceProvider>
       <OnboardingProvider>
         <SetupProvider>
-          <RootStack />
+          <PaymentMethodsProvider>
+            <RootStack />
+          </PaymentMethodsProvider>
         </SetupProvider>
       </OnboardingProvider>
     </ThemePreferenceProvider>
@@ -25,7 +28,8 @@ export default function RootLayout() {
 function RootStack() {
   const onboarding = useOnboarding();
   const setup = useSetup();
-  const isLoaded = onboarding.isLoaded && setup.isLoaded;
+  const paymentMethods = usePaymentMethods();
+  const isLoaded = onboarding.isLoaded && setup.isLoaded && paymentMethods.isLoaded;
   const { hasOnboarded } = onboarding;
 
   useEffect(() => {
@@ -42,6 +46,7 @@ function RootStack() {
         <Stack.Screen name="profile" options={{ presentation: "modal" }} />
         <Stack.Screen name="settings" options={{ presentation: "modal" }} />
         <Stack.Screen name="verify-id" />
+        <Stack.Screen name="link-payment" />
       </Stack.Protected>
       <Stack.Protected guard={!hasOnboarded}>
         <Stack.Screen name="welcome" options={{ animation: "fade" }} />

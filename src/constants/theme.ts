@@ -37,6 +37,8 @@ const light = {
   chipCountSurface: "#ECECF0",
   warningSurface: "#FDF3E4",
   switchThumb: "#FFFFFF",
+  scrim: "rgba(0, 0, 0, 0.35)",
+  outlineBorder: "#C7C7CC",
   unreadSurface: "#F4F7FC",
 };
 
@@ -80,6 +82,8 @@ const dark: ThemeColors = {
   chipCountSurface: "#3A3A3C",
   warningSurface: "#3A2A12",
   switchThumb: "#FFFFFF",
+  scrim: "rgba(0, 0, 0, 0.6)",
+  outlineBorder: "#636366",
   unreadSurface: "#18202C",
 };
 

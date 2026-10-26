@@ -32,6 +32,9 @@ const light = {
   illustrationDotCool: "#BFE3C8",
   illustrationDash: "#AEB4BE",
   illustrationShadow: "rgba(17, 17, 17, 0.14)",
+  summarySurface: "#ECEEF2",
+  summaryBorder: "#FFFFFF",
+  chipCountSurface: "#ECECF0",
 };
 
 export type ThemeColors = typeof light;
@@ -69,6 +72,9 @@ const dark: ThemeColors = {
   illustrationDotCool: "#5E9A6D",
   illustrationDash: "#636366",
   illustrationShadow: "rgba(0, 0, 0, 0.6)",
+  summarySurface: "#1C1C1E",
+  summaryBorder: "#2C2C2E",
+  chipCountSurface: "#3A3A3C",
 };
 
 export const Colors = { light, dark };
@@ -102,6 +108,7 @@ export const FontSize = {
   heading: 20,
   title: 24,
   balanceFraction: 28,
+  largeTitle: 34,
   balance: 44,
 };
 

@@ -1,9 +1,8 @@
 import { Fragment } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { FriendLoanRow } from "@/components/home/friend-loan-row";
+import { FRIEND_ROW_SEPARATOR_INSET, FriendLoanRow } from "@/components/home/friend-loan-row";
 import { LoanStackIllustration } from "@/components/home/loan-stack-illustration";
-import { DEFAULT_AVATAR_SIZE } from "@/components/ui/avatar";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FontSize, Radius, Spacing } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
@@ -61,7 +60,7 @@ export function RecentLoans({ summaries, onSeeAll, onOpenFriend }: RecentLoansPr
           </View>
         ) : (
           summaries.map((summary, index) => (
-            <Fragment key={`${summary.friend.id}:${summary.principal.currency}`}>
+            <Fragment key={summary.key}>
               {index > 0 && (
                 <View style={[styles.separator, { backgroundColor: colors.separator }]} />
               )}
@@ -103,7 +102,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: StyleSheet.hairlineWidth,
-    marginLeft: Spacing.lg + DEFAULT_AVATAR_SIZE + Spacing.md,
+    marginLeft: FRIEND_ROW_SEPARATOR_INSET,
   },
   empty: {
     paddingHorizontal: Spacing.xl,

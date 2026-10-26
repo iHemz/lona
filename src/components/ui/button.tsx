@@ -7,7 +7,7 @@ import { useThemeColors } from "@/hooks/use-theme";
 type ButtonVariant = "primary" | "inverse";
 type ButtonSize = "large" | "compact";
 
-type ButtonProps = {
+export type ButtonProps = {
   label: string;
   onPress?: () => void;
   /** `primary` for the main call to action; `inverse` for high-contrast secondary actions. */

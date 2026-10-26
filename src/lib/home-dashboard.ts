@@ -2,7 +2,8 @@ import type { IsoDate } from "@/lib/dates";
 import {
   overdueInstalmentCount,
   pickFeaturedLoan,
-  summariseLentLoansByFriend,
+  isActiveLent,
+  summariseLoansByFriend,
   totalOutstanding,
   type Friend,
   type FriendLoanSummary,
@@ -44,6 +45,9 @@ export function buildHomeDashboard({
             isOverdue: overdueInstalmentCount(featuredLoan, today) > 0,
           }
         : null,
-    recentLoans: summariseLentLoansByFriend(loans, friends, today).slice(0, RECENT_LOANS_LIMIT),
+    recentLoans: summariseLoansByFriend(loans, friends, today, isActiveLent).slice(
+      0,
+      RECENT_LOANS_LIMIT,
+    ),
   };
 }

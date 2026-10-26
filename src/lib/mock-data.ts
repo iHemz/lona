@@ -24,6 +24,8 @@ export function createMockLedger(
     { id: "marcus-richmond", name: "Marcus Richmond" },
     { id: "jacob-jonas", name: "Jacob Jonas" },
     { id: "priya-shah", name: "Priya Shah" },
+    { id: "tom-okafor", name: "Tom Okafor" },
+    { id: "chloe-park", name: "Chloe Park" },
   ];
 
   const loans: Loan[] = [
@@ -113,6 +115,29 @@ export function createMockLedger(
       repaidMinor: 0,
       createdOn: on(-5),
       schedule: [{ dueDate: on(14), amountMinor: 2500 }],
+    },
+    {
+      id: "loan-8",
+      friendId: "tom-okafor",
+      direction: "borrowed",
+      currency: "GBP",
+      principalMinor: 6000,
+      repaidMinor: 2000,
+      createdOn: on(-15),
+      schedule: [
+        { dueDate: on(-1), amountMinor: 2000 },
+        { dueDate: on(20), amountMinor: 4000 },
+      ],
+    },
+    {
+      id: "loan-9",
+      friendId: "chloe-park",
+      direction: "lent",
+      currency: "GBP",
+      principalMinor: 8000,
+      repaidMinor: 8000,
+      createdOn: on(-90),
+      schedule: [{ dueDate: on(-45), amountMinor: 8000 }],
     },
   ];
 

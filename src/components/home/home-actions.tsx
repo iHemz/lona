@@ -5,14 +5,21 @@ import { IconButton } from "@/components/ui/icon-button";
 import { Spacing } from "@/constants/theme";
 
 type HomeActionsProps = {
+  /** False until the user can move money (ID verified). */
+  canRequestLoan: boolean;
   onRequestLoan?: () => void;
   onMore?: () => void;
 };
 
-export function HomeActions({ onRequestLoan, onMore }: HomeActionsProps) {
+export function HomeActions({ canRequestLoan, onRequestLoan, onMore }: HomeActionsProps) {
   return (
     <View style={styles.row}>
-      <Button label="Request loan" onPress={onRequestLoan} style={styles.primary} />
+      <Button
+        label="Request loan"
+        onPress={onRequestLoan}
+        disabled={!canRequestLoan}
+        style={styles.primary}
+      />
       <IconButton
         icon={{ ios: "ellipsis", android: "more_horiz", web: "more_horiz" }}
         accessibilityLabel="More actions"

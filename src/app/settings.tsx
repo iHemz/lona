@@ -10,6 +10,7 @@ import { useAppearancePicker } from "@/hooks/use-appearance-picker";
 import { useAccount } from "@/hooks/use-ledger";
 import { useOnboarding } from "@/hooks/use-onboarding";
 import { useScreenTopPadding } from "@/hooks/use-screen-top-padding";
+import { useSetup } from "@/hooks/use-setup";
 import { useThemeColors } from "@/hooks/use-theme";
 import { THEME_PREFERENCE_LABELS, useThemePreference } from "@/hooks/use-theme-preference";
 import { maskedNumber } from "@/lib/account";
@@ -24,6 +25,7 @@ export default function SettingsScreen() {
   const { preference } = useThemePreference();
   const openAppearancePicker = useAppearancePicker();
   const { resetOnboarding } = useOnboarding();
+  const setup = useSetup();
   // TODO: wire to biometric auth and persist once those exist; local state for now.
   const [biometricsEnabled, setBiometricsEnabled] = useState(true);
 
@@ -112,7 +114,16 @@ export default function SettingsScreen() {
               label: "Replay onboarding",
               icon: { ios: "arrow.counterclockwise", android: "replay", web: "replay" },
               trailing: "none",
-              onPress: resetOnboarding,
+              onPress: () => {
+                setup.reset();
+                resetOnboarding();
+              },
+            },
+            {
+              label: "Complete setup",
+              icon: { ios: "checklist.checked", android: "checklist", web: "checklist" },
+              trailing: "none",
+              onPress: setup.completeAll,
             },
           ]}
         />

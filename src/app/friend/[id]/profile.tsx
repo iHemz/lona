@@ -29,7 +29,7 @@ export default function FriendProfileScreen() {
 
   const name = firstName(friend.name);
   const totals = lifetimeTotals(loans, currency);
-  const record = repaymentRecord(loans);
+  const record = repaymentRecord(loans, "lent");
   const lentLabel = `${formatMoney(totals.lent, { trimWholeAmounts: true })} lent`;
   const rateLabel =
     record.onTimeRate === null ? null : `${Math.round(record.onTimeRate * 100)}% return rate`;

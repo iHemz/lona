@@ -1,8 +1,17 @@
+import type { Account } from "@/lib/account";
 import type { ActivityEvent } from "@/lib/activity";
 import { addDays, type IsoDate } from "@/lib/dates";
 import type { Friend, Loan } from "@/lib/loans";
 
 export const MOCK_CURRENT_USER: Friend = { id: "me", name: "Ade Lawal", joinedOn: "2025-01-15" };
+
+export const MOCK_ACCOUNT: Account = {
+  user: MOCK_CURRENT_USER,
+  isVerified: true,
+  contactVerified: true,
+  card: { last4: "4242" },
+  bank: { name: "Lloyds", last4: "8974" },
+};
 
 export type MockScenario = "populated" | "empty";
 

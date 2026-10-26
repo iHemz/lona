@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -6,7 +7,6 @@ import { GoogleLogo } from "@/components/brand/google-logo";
 import { LonaMark } from "@/components/brand/lona-mark";
 import { Button } from "@/components/ui/button";
 import { FontSize, Spacing } from "@/constants/theme";
-import { useOnboarding } from "@/hooks/use-onboarding";
 import { useThemeColors } from "@/hooks/use-theme";
 import { ColorSchemeOverride } from "@/hooks/use-theme-preference";
 
@@ -26,11 +26,11 @@ export default function SignUpScreen() {
 function SignUpContent() {
   const colors = useThemeColors();
   const insets = useSafeAreaInsets();
-  const { completeOnboarding } = useOnboarding();
+  const router = useRouter();
 
-  // TODO: replace with real sign-in per provider once auth exists. For now every option
-  // finishes onboarding so the app can be used; the root guard then shows the tabs.
-  const continueWith = () => completeOnboarding();
+  // TODO: sign in with the chosen provider once auth exists. Every option then continues to
+  // phone verification, which is how friends find each other.
+  const continueWith = () => router.push("/welcome/phone");
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   title: {
-    fontSize: 40,
+    fontSize: FontSize.display,
     fontWeight: "800",
     letterSpacing: -1,
     lineHeight: 46,

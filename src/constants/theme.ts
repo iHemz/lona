@@ -119,6 +119,7 @@ export const FontSize = {
   title: 24,
   balanceFraction: 28,
   largeTitle: 34,
+  display: 40,
   balance: 44,
 };
 

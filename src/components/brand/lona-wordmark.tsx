@@ -1,5 +1,6 @@
 import { StyleSheet, Text, type StyleProp, type TextStyle } from "react-native";
 
+import { FontSize } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
 
 type LonaWordmarkProps = {
@@ -19,7 +20,7 @@ export function LonaWordmark({ style }: LonaWordmarkProps) {
 
 const styles = StyleSheet.create({
   wordmark: {
-    fontSize: 40,
+    fontSize: FontSize.display,
     fontWeight: "800",
     letterSpacing: -1,
   },

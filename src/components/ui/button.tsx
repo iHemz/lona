@@ -1,6 +1,13 @@
 import { SymbolView, type SymbolViewProps } from "expo-symbols";
 import type { ReactNode } from "react";
-import { Pressable, StyleSheet, Text, type StyleProp, type ViewStyle } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 
 import { FontSize, Radius, Spacing, TouchTarget, type ThemeColors } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
@@ -20,6 +27,9 @@ export type ButtonProps = {
   icon?: SymbolViewProps["name"];
   /** A custom leading element (e.g. a brand logo) when a symbol won't do; replaces `icon`. */
   leading?: ReactNode;
+  disabled?: boolean;
+  /** Shows a spinner in place of the icon and blocks presses, e.g. while a request runs. */
+  isLoading?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 
@@ -43,6 +53,8 @@ export function Button({
   size = "large",
   icon,
   leading,
+  disabled = false,
+  isLoading = false,
   style,
 }: ButtonProps) {
   const colors = useThemeColors();
@@ -51,16 +63,23 @@ export function Button({
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityState={{ disabled: disabled || isLoading, busy: isLoading }}
       onPress={onPress}
+      disabled={disabled || isLoading}
       style={({ pressed }) => [
         styles.button,
         size === "large" ? styles.large : styles.compact,
         { backgroundColor: background, borderColor: border },
         pressed && styles.pressed,
+        disabled && !isLoading && styles.disabled,
         style,
       ]}
     >
-      {leading ?? (icon && <SymbolView name={icon} size={18} tintColor={foreground} />)}
+      {isLoading ? (
+        <ActivityIndicator color={foreground} />
+      ) : (
+        (leading ?? (icon && <SymbolView name={icon} size={18} tintColor={foreground} />))
+      )}
       <Text
         style={[styles.label, size === "compact" && styles.compactLabel, { color: foreground }]}
       >
@@ -90,6 +109,9 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.8,
+  },
+  disabled: {
+    opacity: 0.4,
   },
   label: {
     fontSize: FontSize.body,

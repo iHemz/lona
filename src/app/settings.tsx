@@ -7,6 +7,7 @@ import { LinkList } from "@/components/ui/link-list";
 import { ModalCloseButton } from "@/components/ui/modal-close-button";
 import { FontSize, Spacing } from "@/constants/theme";
 import { useAppearancePicker } from "@/hooks/use-appearance-picker";
+import { useHomeTour } from "@/hooks/use-home-tour";
 import { useAccount } from "@/hooks/use-ledger";
 import { useOnboarding } from "@/hooks/use-onboarding";
 import { usePaymentMethods } from "@/hooks/use-payment-methods";
@@ -28,6 +29,7 @@ export default function SettingsScreen() {
   const { resetOnboarding } = useOnboarding();
   const setup = useSetup();
   const paymentMethods = usePaymentMethods();
+  const homeTour = useHomeTour();
   // TODO: wire to biometric auth and persist once those exist; local state for now.
   const [biometricsEnabled, setBiometricsEnabled] = useState(true);
 
@@ -119,6 +121,7 @@ export default function SettingsScreen() {
               onPress: () => {
                 setup.reset();
                 paymentMethods.reset();
+                homeTour.reset();
                 resetOnboarding();
               },
             },

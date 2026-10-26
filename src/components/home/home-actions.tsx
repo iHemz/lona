@@ -1,3 +1,4 @@
+import type { Ref } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { BUTTON_HEIGHT, Button } from "@/components/ui/button";
@@ -9,9 +10,11 @@ type HomeActionsProps = {
   canRequestLoan: boolean;
   onRequestLoan?: () => void;
   onMore?: () => void;
+  /** Lets the Home tour point at the "•••" button. */
+  moreRef?: Ref<View>;
 };
 
-export function HomeActions({ canRequestLoan, onRequestLoan, onMore }: HomeActionsProps) {
+export function HomeActions({ canRequestLoan, onRequestLoan, onMore, moreRef }: HomeActionsProps) {
   return (
     <View style={styles.row}>
       <Button
@@ -21,6 +24,7 @@ export function HomeActions({ canRequestLoan, onRequestLoan, onMore }: HomeActio
         style={styles.primary}
       />
       <IconButton
+        ref={moreRef}
         icon={{ ios: "ellipsis", android: "more_horiz", web: "more_horiz" }}
         accessibilityLabel="More actions"
         onPress={onMore}

@@ -1,7 +1,8 @@
 import { StyleSheet, View } from "react-native";
 
-import { LoanStackIllustration } from "@/components/home/loan-stack-illustration";
+import { CardStackIllustration } from "@/components/ui/card-stack-illustration";
 import { EmptyState } from "@/components/ui/empty-state";
+import { LOAN_STACK_ICON } from "@/constants/icons";
 import { Spacing } from "@/constants/theme";
 import type { LoanTab } from "@/lib/loans-list";
 
@@ -31,7 +32,7 @@ export function LoansEmpty({ tab, onSetUpLoan }: LoansEmptyProps) {
   return (
     <View style={styles.container}>
       <EmptyState
-        illustration={<LoanStackIllustration />}
+        illustration={<CardStackIllustration icon={LOAN_STACK_ICON} />}
         title={title}
         body={body}
         action={

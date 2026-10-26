@@ -1,3 +1,4 @@
+import type { SymbolViewProps } from "expo-symbols";
 import { StyleSheet, View } from "react-native";
 
 import { DashedIconBadge } from "@/components/ui/dashed-icon-badge";
@@ -6,7 +7,7 @@ import { useThemeColors } from "@/hooks/use-theme";
 
 type Side = "left" | "right";
 
-function LoanCardSketch({ side }: { side: Side }) {
+function CardSketch({ side }: { side: Side }) {
   const colors = useThemeColors();
   const dotColor = side === "left" ? colors.illustrationDotWarm : colors.illustrationDotCool;
 
@@ -29,17 +30,17 @@ function LoanCardSketch({ side }: { side: Side }) {
   );
 }
 
-// Decorative: the empty state's title and body carry the meaning.
-export function LoanStackIllustration() {
+/** Two sketched cards behind a dashed icon badge. Decorative: the empty state's copy carries the meaning. */
+export function CardStackIllustration({ icon }: { icon: SymbolViewProps["name"] }) {
   return (
     <View
       accessibilityElementsHidden
       importantForAccessibility="no-hide-descendants"
       style={styles.container}
     >
-      <LoanCardSketch side="left" />
-      <LoanCardSketch side="right" />
-      <DashedIconBadge icon={{ ios: "square.stack.3d.up", android: "stacks", web: "stacks" }} />
+      <CardSketch side="left" />
+      <CardSketch side="right" />
+      <DashedIconBadge icon={icon} />
     </View>
   );
 }

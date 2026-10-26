@@ -2,8 +2,9 @@ import { Fragment } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { FRIEND_ROW_SEPARATOR_INSET, FriendLoanRow } from "@/components/home/friend-loan-row";
-import { LoanStackIllustration } from "@/components/home/loan-stack-illustration";
+import { CardStackIllustration } from "@/components/ui/card-stack-illustration";
 import { EmptyState } from "@/components/ui/empty-state";
+import { LOAN_STACK_ICON } from "@/constants/icons";
 import { FontSize, Radius, Spacing } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
 import type { FriendLoanSummary } from "@/lib/loans";
@@ -48,12 +49,12 @@ export function RecentLoans({ summaries, onSeeAll, onOpenFriend }: RecentLoansPr
         {isEmpty ? (
           <View style={styles.empty}>
             <EmptyState
-              illustration={<LoanStackIllustration />}
+              illustration={<CardStackIllustration icon={LOAN_STACK_ICON} />}
               title="No recent loan"
               body="Loans you make or receive will show up here, newest first."
               action={{
                 label: "View loans",
-                icon: { ios: "square.stack.3d.up", android: "stacks", web: "stacks" },
+                icon: LOAN_STACK_ICON,
                 onPress: onSeeAll,
               }}
             />

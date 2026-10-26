@@ -45,6 +45,23 @@ export function formatShortDate(date: IsoDate): string {
   }).format(toUtcMs(date));
 }
 
+/** A moment in time, ISO 8601. Without an offset it's read as the device's local time. */
+export type IsoDateTime = string;
+
+/** The local calendar day an instant falls on. */
+export function localDay(at: IsoDateTime): IsoDate {
+  return todayIsoDate(new Date(at));
+}
+
+/** "11:40" (24-hour, local time). */
+export function formatTime(at: IsoDateTime): string {
+  return new Intl.DateTimeFormat(DEFAULT_LOCALE, {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  }).format(new Date(at));
+}
+
 /** "May 2026" */
 export function formatMonthYear(date: IsoDate): string {
   return new Intl.DateTimeFormat(DEFAULT_LOCALE, {

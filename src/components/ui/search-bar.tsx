@@ -1,20 +1,29 @@
 import { SymbolView } from "expo-symbols";
+import type { ReactNode } from "react";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 
 import { BUTTON_HEIGHT } from "@/components/ui/button";
-import { IconButton } from "@/components/ui/icon-button";
 import { FontSize, Radius, Spacing } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
 
-type LoanSearchBarProps = {
+type SearchBarProps = {
   value: string;
   onChangeText: (text: string) => void;
-  onOpenFilters?: () => void;
+  placeholder: string;
+  accessibilityLabel: string;
+  height?: number;
+  /** Rendered beside the field, e.g. a filter or add button sized to `height`. */
+  trailing?: ReactNode;
 };
 
-const HEIGHT = BUTTON_HEIGHT.large;
-
-export function LoanSearchBar({ value, onChangeText, onOpenFilters }: LoanSearchBarProps) {
+export function SearchBar({
+  value,
+  onChangeText,
+  placeholder,
+  accessibilityLabel,
+  height = BUTTON_HEIGHT.large,
+  trailing,
+}: SearchBarProps) {
   const colors = useThemeColors();
 
   return (
@@ -22,7 +31,11 @@ export function LoanSearchBar({ value, onChangeText, onOpenFilters }: LoanSearch
       <View
         style={[
           styles.field,
-          { backgroundColor: colors.surface, borderColor: colors.surfaceBorder },
+          {
+            minHeight: height,
+            backgroundColor: colors.surface,
+            borderColor: colors.surfaceBorder,
+          },
         ]}
       >
         <SymbolView
@@ -33,9 +46,9 @@ export function LoanSearchBar({ value, onChangeText, onOpenFilters }: LoanSearch
         <TextInput
           value={value}
           onChangeText={onChangeText}
-          placeholder="Search loan"
+          placeholder={placeholder}
           placeholderTextColor={colors.textTertiary}
-          accessibilityLabel="Search loans by friend's name"
+          accessibilityLabel={accessibilityLabel}
           autoCorrect={false}
           autoCapitalize="words"
           returnKeyType="search"
@@ -57,16 +70,7 @@ export function LoanSearchBar({ value, onChangeText, onOpenFilters }: LoanSearch
           </Pressable>
         )}
       </View>
-      <IconButton
-        icon={{
-          ios: "line.3.horizontal.decrease",
-          android: "filter_list",
-          web: "filter_list",
-        }}
-        accessibilityLabel="Filter loans"
-        onPress={onOpenFilters}
-        size={HEIGHT}
-      />
+      {trailing}
     </View>
   );
 }
@@ -79,7 +83,6 @@ const styles = StyleSheet.create({
   },
   field: {
     flex: 1,
-    minHeight: HEIGHT,
     flexDirection: "row",
     alignItems: "center",
     gap: Spacing.sm,
@@ -90,6 +93,6 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: FontSize.body,
-    paddingVertical: Spacing.md,
+    paddingVertical: Spacing.sm,
   },
 });

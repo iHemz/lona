@@ -17,6 +17,12 @@ export function shortName(name: string): string {
   return `${parts[0]} ${parts[parts.length - 1]?.[0]}.`;
 }
 
+/** Case-insensitive substring match on a name; an empty query matches everything. */
+export function matchesName(name: string, query: string): boolean {
+  const needle = query.trim().toLocaleLowerCase();
+  return !needle || name.toLocaleLowerCase().includes(needle);
+}
+
 /** Stable index for picking a colour from a palette, so a friend keeps the same colour. */
 export function stableIndex(key: string, size: number): number {
   let hash = 0;

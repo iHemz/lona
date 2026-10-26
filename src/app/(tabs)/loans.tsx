@@ -3,11 +3,14 @@ import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, View } from
 import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { FRIEND_ROW_SEPARATOR_INSET, FriendLoanRow } from "@/components/home/friend-loan-row";
-import { LoanSearchBar } from "@/components/loans/loan-search-bar";
 import { LoanTabChips } from "@/components/loans/loan-tab-chips";
 import { LoansEmpty } from "@/components/loans/loans-empty";
 import { LoansSummaryCard } from "@/components/loans/loans-summary-card";
-import { FontSize, Radius, Spacing } from "@/constants/theme";
+import { BUTTON_HEIGHT } from "@/components/ui/button";
+import { GroupedRow, GroupedSeparator } from "@/components/ui/grouped-list";
+import { IconButton } from "@/components/ui/icon-button";
+import { SearchBar } from "@/components/ui/search-bar";
+import { FontSize, Spacing } from "@/constants/theme";
 import { useKeyboardVisible } from "@/hooks/use-keyboard-visible";
 import { useLedger } from "@/hooks/use-ledger";
 import { useThemeColors } from "@/hooks/use-theme";
@@ -38,9 +41,6 @@ function LoansScreenContent() {
   const view = tabs[selectedTab];
   const rows = filterBySearch(view.rows, query);
   const hasLoans = view.rows.length > 0;
-  const lastIndex = rows.length - 1;
-
-  const cardEdges = { backgroundColor: colors.surface, borderColor: colors.surfaceBorder };
 
   return (
     <KeyboardAvoidingView
@@ -51,22 +51,11 @@ function LoansScreenContent() {
         data={rows}
         keyExtractor={(row) => row.key}
         renderItem={({ item, index }) => (
-          <View
-            style={[
-              styles.rowCard,
-              cardEdges,
-              index === 0 && styles.firstRow,
-              index === lastIndex && styles.lastRow,
-            ]}
-          >
+          <GroupedRow index={index} count={rows.length}>
             <FriendLoanRow summary={item} />
-          </View>
+          </GroupedRow>
         )}
-        ItemSeparatorComponent={() => (
-          <View style={[styles.rowCard, cardEdges]}>
-            <View style={[styles.separator, { backgroundColor: colors.separator }]} />
-          </View>
-        )}
+        ItemSeparatorComponent={() => <GroupedSeparator inset={FRIEND_ROW_SEPARATOR_INSET} />}
         ListHeaderComponent={
           <View style={styles.header}>
             <Text accessibilityRole="header" style={[styles.title, { color: colors.text }]}>
@@ -116,7 +105,23 @@ function LoansScreenContent() {
             { paddingBottom: (isKeyboardVisible ? 0 : insets.bottom) + Spacing.md },
           ]}
         >
-          <LoanSearchBar value={query} onChangeText={setQuery} />
+          <SearchBar
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Search loan"
+            accessibilityLabel="Search loans by friend's name"
+            trailing={
+              <IconButton
+                icon={{
+                  ios: "line.3.horizontal.decrease",
+                  android: "filter_list",
+                  web: "filter_list",
+                }}
+                accessibilityLabel="Filter loans"
+                size={BUTTON_HEIGHT.large}
+              />
+            }
+          />
         </View>
       )}
     </KeyboardAvoidingView>
@@ -146,24 +151,6 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
     textTransform: "uppercase",
     marginTop: Spacing.sm,
-  },
-  rowCard: {
-    borderLeftWidth: StyleSheet.hairlineWidth,
-    borderRightWidth: StyleSheet.hairlineWidth,
-  },
-  firstRow: {
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopLeftRadius: Radius.lg,
-    borderTopRightRadius: Radius.lg,
-  },
-  lastRow: {
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomLeftRadius: Radius.lg,
-    borderBottomRightRadius: Radius.lg,
-  },
-  separator: {
-    height: StyleSheet.hairlineWidth,
-    marginLeft: FRIEND_ROW_SEPARATOR_INSET,
   },
   noMatches: {
     fontSize: FontSize.subhead,

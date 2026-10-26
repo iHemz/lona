@@ -1,5 +1,5 @@
 import { SymbolView, type SymbolViewProps } from "expo-symbols";
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet, type ColorValue } from "react-native";
 
 import { TouchTarget } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
@@ -9,6 +9,8 @@ type IconButtonProps = {
   accessibilityLabel: string;
   onPress?: () => void;
   size?: number;
+  /** Icon colour; defaults to the primary text colour. */
+  tintColor?: ColorValue;
 };
 
 export function IconButton({
@@ -16,6 +18,7 @@ export function IconButton({
   accessibilityLabel,
   onPress,
   size = TouchTarget,
+  tintColor,
 }: IconButtonProps) {
   const colors = useThemeColors();
 
@@ -36,7 +39,7 @@ export function IconButton({
         pressed && styles.pressed,
       ]}
     >
-      <SymbolView name={icon} size={size * 0.45} tintColor={colors.text} />
+      <SymbolView name={icon} size={size * 0.45} tintColor={tintColor ?? colors.text} />
     </Pressable>
   );
 }

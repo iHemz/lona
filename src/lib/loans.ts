@@ -4,6 +4,8 @@ import { sumMinor, type CurrencyCode, type Money } from "@/lib/money";
 export type Friend = {
   id: string;
   name: string;
+  /** When they joined Lona. */
+  joinedOn: IsoDate;
 };
 
 export type Instalment = {

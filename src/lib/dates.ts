@@ -23,6 +23,19 @@ export function daysBetween(from: IsoDate, to: IsoDate): number {
   return Math.round((toUtcMs(to) - toUtcMs(from)) / MS_PER_DAY);
 }
 
+/** "today", "3 days ago", "6 months ago". English-only, like the rest of the copy for now. */
+export function formatTimeAgo(date: IsoDate, today: IsoDate): string {
+  const days = Math.max(daysBetween(date, today), 0);
+  const ago = (count: number, unit: string) => `${count} ${unit}${count === 1 ? "" : "s"} ago`;
+  if (days === 0) return "today";
+  if (days === 1) return "yesterday";
+  if (days < 7) return ago(days, "day");
+  if (days < 30) return ago(Math.floor(days / 7), "week");
+  // 30-day months reach 12 just before a year; cap so it never reads "12 months ago".
+  if (days < 365) return ago(Math.min(Math.floor(days / 30), 11), "month");
+  return ago(Math.floor(days / 365), "year");
+}
+
 /** "12 Aug" */
 export function formatShortDate(date: IsoDate): string {
   return new Intl.DateTimeFormat(DEFAULT_LOCALE, {

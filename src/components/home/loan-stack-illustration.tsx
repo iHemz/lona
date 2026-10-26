@@ -1,6 +1,6 @@
-import { SymbolView } from "expo-symbols";
 import { StyleSheet, View } from "react-native";
 
+import { DashedIconBadge } from "@/components/ui/dashed-icon-badge";
 import { Radius, Spacing } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
 
@@ -31,8 +31,6 @@ function LoanCardSketch({ side }: { side: Side }) {
 
 // Decorative: the empty state's title and body carry the meaning.
 export function LoanStackIllustration() {
-  const colors = useThemeColors();
-
   return (
     <View
       accessibilityElementsHidden
@@ -41,23 +39,10 @@ export function LoanStackIllustration() {
     >
       <LoanCardSketch side="left" />
       <LoanCardSketch side="right" />
-      <View
-        style={[
-          styles.badge,
-          { backgroundColor: colors.illustrationPaper, borderColor: colors.illustrationDash },
-        ]}
-      >
-        <SymbolView
-          name={{ ios: "square.stack.3d.up", android: "stacks", web: "stacks" }}
-          size={28}
-          tintColor={colors.text}
-        />
-      </View>
+      <DashedIconBadge icon={{ ios: "square.stack.3d.up", android: "stacks", web: "stacks" }} />
     </View>
   );
 }
-
-const BADGE_SIZE = 72;
 
 const styles = StyleSheet.create({
   container: {
@@ -104,14 +89,5 @@ const styles = StyleSheet.create({
   },
   shortLine: {
     width: "60%",
-  },
-  badge: {
-    width: BADGE_SIZE,
-    height: BADGE_SIZE,
-    borderRadius: BADGE_SIZE / 2,
-    borderWidth: 1.5,
-    borderStyle: "dashed",
-    alignItems: "center",
-    justifyContent: "center",
   },
 });

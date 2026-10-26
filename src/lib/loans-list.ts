@@ -10,6 +10,7 @@ import {
   type Loan,
 } from "@/lib/loans";
 import { sumMinor, type CurrencyCode, type Money } from "@/lib/money";
+import { matchesName } from "@/lib/names";
 
 export type LoanTab = "lent" | "borrowed" | "settled";
 
@@ -74,7 +75,5 @@ export function buildLoanTabs({
 
 /** Case-insensitive match on the friend's name; an empty query matches everything. */
 export function filterBySearch(rows: FriendLoanSummary[], query: string): FriendLoanSummary[] {
-  const needle = query.trim().toLocaleLowerCase();
-  if (!needle) return rows;
-  return rows.filter((row) => row.friend.name.toLocaleLowerCase().includes(needle));
+  return rows.filter((row) => matchesName(row.friend.name, query));
 }

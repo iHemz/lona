@@ -1,7 +1,7 @@
 import { addDays, type IsoDate } from "@/lib/dates";
 import type { Friend, Loan } from "@/lib/loans";
 
-export const MOCK_CURRENT_USER: Friend = { id: "me", name: "Ade Lawal" };
+export const MOCK_CURRENT_USER: Friend = { id: "me", name: "Ade Lawal", joinedOn: "2025-01-15" };
 
 export type MockScenario = "populated" | "empty";
 
@@ -18,14 +18,14 @@ export function createMockLedger(
   const on = (days: number) => addDays(today, days);
 
   const friends: Friend[] = [
-    { id: "sasha-bello", name: "Sasha Bello" },
-    { id: "alex-liu", name: "Alex Liu" },
-    { id: "sasha-roy", name: "Sasha Roy" },
-    { id: "marcus-richmond", name: "Marcus Richmond" },
-    { id: "jacob-jonas", name: "Jacob Jonas" },
-    { id: "priya-shah", name: "Priya Shah" },
-    { id: "tom-okafor", name: "Tom Okafor" },
-    { id: "chloe-park", name: "Chloe Park" },
+    { id: "sasha-bello", name: "Sasha Bello", joinedOn: on(-400) },
+    { id: "alex-liu", name: "Alex Liu", joinedOn: on(-180) },
+    { id: "sasha-roy", name: "Sasha Roy", joinedOn: on(-21) },
+    { id: "marcus-richmond", name: "Marcus Richmond", joinedOn: on(-95) },
+    { id: "jacob-jonas", name: "Jacob Jonas", joinedOn: on(-60) },
+    { id: "priya-shah", name: "Priya Shah", joinedOn: on(-370) },
+    { id: "tom-okafor", name: "Tom Okafor", joinedOn: on(-12) },
+    { id: "chloe-park", name: "Chloe Park", joinedOn: on(-730) },
   ];
 
   const loans: Loan[] = [

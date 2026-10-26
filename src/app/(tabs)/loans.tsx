@@ -1,5 +1,177 @@
-import { PlaceholderScreen } from "@/components/ui/placeholder-screen";
+import { useState } from "react";
+import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, View } from "react-native";
+import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { FRIEND_ROW_SEPARATOR_INSET, FriendLoanRow } from "@/components/home/friend-loan-row";
+import { LoanSearchBar } from "@/components/loans/loan-search-bar";
+import { LoanTabChips } from "@/components/loans/loan-tab-chips";
+import { LoansEmpty } from "@/components/loans/loans-empty";
+import { LoansSummaryCard } from "@/components/loans/loans-summary-card";
+import { FontSize, Radius, Spacing } from "@/constants/theme";
+import { useKeyboardVisible } from "@/hooks/use-keyboard-visible";
+import { useLedger } from "@/hooks/use-ledger";
+import { useThemeColors } from "@/hooks/use-theme";
+import { buildLoanTabs, filterBySearch, LOAN_TABS, type LoanTab } from "@/lib/loans-list";
+
+// iOS applies safe-area insets to the list itself (contentInsetAdjustmentBehavior);
+// Android and web need the top inset as padding.
+const appliesSafeAreaAutomatically = Platform.OS === "ios";
+
+// A provider inside the tab measures insets from the screen's own position, so on iOS the
+// bottom inset includes the floating tab bar and the search bar sits just above it.
 export default function LoansScreen() {
-  return <PlaceholderScreen title="Loans" />;
+  return (
+    <SafeAreaProvider>
+      <LoansScreenContent />
+    </SafeAreaProvider>
+  );
 }
+
+function LoansScreenContent() {
+  const colors = useThemeColors();
+  const insets = useSafeAreaInsets();
+  const isKeyboardVisible = useKeyboardVisible();
+  const tabs = buildLoanTabs(useLedger());
+  const [selectedTab, setSelectedTab] = useState<LoanTab>("lent");
+  const [query, setQuery] = useState("");
+
+  const view = tabs[selectedTab];
+  const rows = filterBySearch(view.rows, query);
+  const hasLoans = view.rows.length > 0;
+  const lastIndex = rows.length - 1;
+
+  const cardEdges = { backgroundColor: colors.surface, borderColor: colors.surfaceBorder };
+
+  return (
+    <KeyboardAvoidingView
+      style={[styles.screen, { backgroundColor: colors.background }]}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <FlatList
+        data={rows}
+        keyExtractor={(row) => row.key}
+        renderItem={({ item, index }) => (
+          <View
+            style={[
+              styles.rowCard,
+              cardEdges,
+              index === 0 && styles.firstRow,
+              index === lastIndex && styles.lastRow,
+            ]}
+          >
+            <FriendLoanRow summary={item} />
+          </View>
+        )}
+        ItemSeparatorComponent={() => (
+          <View style={[styles.rowCard, cardEdges]}>
+            <View style={[styles.separator, { backgroundColor: colors.separator }]} />
+          </View>
+        )}
+        ListHeaderComponent={
+          <View style={styles.header}>
+            <Text accessibilityRole="header" style={[styles.title, { color: colors.text }]}>
+              Loans
+            </Text>
+            <LoanTabChips
+              tabs={LOAN_TABS.map(({ tab, label }) => ({
+                tab,
+                label,
+                count: tabs[tab].rows.length,
+              }))}
+              selected={selectedTab}
+              onSelect={setSelectedTab}
+            />
+            <LoansSummaryCard label={view.totalLabel} total={view.total} />
+            {hasLoans && (
+              <Text
+                accessibilityRole="header"
+                style={[styles.sectionTitle, { color: colors.textSecondary }]}
+              >
+                {view.sectionTitle}
+              </Text>
+            )}
+          </View>
+        }
+        ListEmptyComponent={
+          hasLoans ? (
+            <Text style={[styles.noMatches, { color: colors.textSecondary }]}>
+              No loans match “{query.trim()}”.
+            </Text>
+          ) : (
+            <LoansEmpty tab={selectedTab} />
+          )
+        }
+        contentInsetAdjustmentBehavior="automatic"
+        contentContainerStyle={[
+          styles.content,
+          !appliesSafeAreaAutomatically && { paddingTop: insets.top + Spacing.sm },
+        ]}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+      />
+      {hasLoans && (
+        <View
+          style={[
+            styles.searchDock,
+            { paddingBottom: (isKeyboardVisible ? 0 : insets.bottom) + Spacing.md },
+          ]}
+        >
+          <LoanSearchBar value={query} onChangeText={setQuery} />
+        </View>
+      )}
+    </KeyboardAvoidingView>
+  );
+}
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
+  content: {
+    paddingHorizontal: Spacing.lg,
+    paddingBottom: Spacing.xl,
+  },
+  header: {
+    gap: Spacing.xl,
+    paddingBottom: Spacing.md,
+  },
+  title: {
+    fontSize: FontSize.largeTitle,
+    fontWeight: "700",
+    letterSpacing: -0.4,
+  },
+  sectionTitle: {
+    fontSize: FontSize.footnote,
+    fontWeight: "600",
+    letterSpacing: 0.6,
+    textTransform: "uppercase",
+    marginTop: Spacing.sm,
+  },
+  rowCard: {
+    borderLeftWidth: StyleSheet.hairlineWidth,
+    borderRightWidth: StyleSheet.hairlineWidth,
+  },
+  firstRow: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopLeftRadius: Radius.lg,
+    borderTopRightRadius: Radius.lg,
+  },
+  lastRow: {
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomLeftRadius: Radius.lg,
+    borderBottomRightRadius: Radius.lg,
+  },
+  separator: {
+    height: StyleSheet.hairlineWidth,
+    marginLeft: FRIEND_ROW_SEPARATOR_INSET,
+  },
+  noMatches: {
+    fontSize: FontSize.subhead,
+    textAlign: "center",
+    paddingVertical: Spacing.xxl,
+  },
+  searchDock: {
+    paddingHorizontal: Spacing.lg,
+    paddingTop: Spacing.sm,
+  },
+});

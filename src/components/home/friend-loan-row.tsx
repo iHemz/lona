@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, DEFAULT_AVATAR_SIZE } from "@/components/ui/avatar";
 import { FontSize, Spacing, type ThemeColors } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
 import {
@@ -23,6 +23,9 @@ function toneColor(tone: StatusTone, colors: ThemeColors): string {
       return colors.textSecondary;
   }
 }
+
+/** Left inset for separators so they line up with the text, not the avatar. */
+export const FRIEND_ROW_SEPARATOR_INSET = Spacing.lg + DEFAULT_AVATAR_SIZE + Spacing.md;
 
 type FriendLoanRowProps = {
   summary: FriendLoanSummary;

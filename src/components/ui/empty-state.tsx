@@ -2,7 +2,7 @@ import type { SymbolViewProps } from "expo-symbols";
 import type { ReactNode } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-import { Button } from "@/components/ui/button";
+import { Button, type ButtonProps } from "@/components/ui/button";
 import { FontSize, Spacing } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
 
@@ -12,10 +12,13 @@ type EmptyStateProps = {
   accessory?: ReactNode;
   title: string;
   body: string;
+  /** Defaults to a compact inverse button. */
   action?: {
     label: string;
     icon?: SymbolViewProps["name"];
     onPress?: () => void;
+    variant?: ButtonProps["variant"];
+    size?: ButtonProps["size"];
   };
 };
 
@@ -37,8 +40,8 @@ export function EmptyState({ illustration, accessory, title, body, action }: Emp
           label={action.label}
           icon={action.icon}
           onPress={action.onPress}
-          variant="inverse"
-          size="compact"
+          variant={action.variant ?? "inverse"}
+          size={action.size ?? "compact"}
         />
       )}
     </View>

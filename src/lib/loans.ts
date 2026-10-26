@@ -128,7 +128,10 @@ export type DueStatus =
   | { kind: "none" };
 
 export type FriendLoanSummary = {
+  /** Unique per friend, currency and direction. */
+  key: string;
   friend: Friend;
+  direction: LoanDirection;
   loanCount: number;
   repaid: Money;
   principal: Money;
@@ -152,29 +155,40 @@ function dueStatusFor(loans: Loan[], today: IsoDate): DueStatus {
   return { kind: "scheduled", date: soonest, isNextOfSeveral: loans.length > 1 };
 }
 
+export function isActiveLent(loan: Loan): boolean {
+  return loan.direction === "lent" && !isSettled(loan);
+}
+
+export function isActiveBorrowed(loan: Loan): boolean {
+  return loan.direction === "borrowed" && !isSettled(loan);
+}
+
 /**
- * Groups active lent loans per friend (and currency, so amounts are never mixed),
- * most recently created first.
+ * Groups the loans matching `include` per friend (and per currency and direction, so
+ * amounts are never mixed), most recently created first.
  */
-export function summariseLentLoansByFriend(
+export function summariseLoansByFriend(
   loans: Loan[],
   friends: Friend[],
   today: IsoDate,
+  include: (loan: Loan) => boolean,
 ): FriendLoanSummary[] {
   const groups = new Map<string, Loan[]>();
   for (const loan of loans) {
-    if (loan.direction !== "lent" || isSettled(loan)) continue;
-    const key = `${loan.friendId}:${loan.currency}`;
+    if (!include(loan)) continue;
+    const key = `${loan.friendId}:${loan.currency}:${loan.direction}`;
     groups.set(key, [...(groups.get(key) ?? []), loan]);
   }
 
   const summaries: FriendLoanSummary[] = [];
-  for (const group of groups.values()) {
+  for (const [key, group] of groups) {
     const [first] = group;
     const friend = friends.find((candidate) => candidate.id === first?.friendId);
     if (!first || !friend) continue;
     summaries.push({
+      key,
       friend,
+      direction: first.direction,
       loanCount: group.length,
       repaid: {
         amountMinor: sumMinor(group.map((loan) => loan.repaidMinor)),

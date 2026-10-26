@@ -8,6 +8,7 @@ import { ModalCloseButton } from "@/components/ui/modal-close-button";
 import { FontSize, Spacing } from "@/constants/theme";
 import { useAppearancePicker } from "@/hooks/use-appearance-picker";
 import { useAccount } from "@/hooks/use-ledger";
+import { useOnboarding } from "@/hooks/use-onboarding";
 import { useScreenTopPadding } from "@/hooks/use-screen-top-padding";
 import { useThemeColors } from "@/hooks/use-theme";
 import { THEME_PREFERENCE_LABELS, useThemePreference } from "@/hooks/use-theme-preference";
@@ -22,6 +23,7 @@ export default function SettingsScreen() {
   const { card } = useAccount();
   const { preference } = useThemePreference();
   const openAppearancePicker = useAppearancePicker();
+  const { resetOnboarding } = useOnboarding();
   // TODO: wire to biometric auth and persist once those exist; local state for now.
   const [biometricsEnabled, setBiometricsEnabled] = useState(true);
 
@@ -101,6 +103,20 @@ export default function SettingsScreen() {
           },
         ]}
       />
+
+      {__DEV__ && (
+        <LinkList
+          title="Developer"
+          items={[
+            {
+              label: "Replay onboarding",
+              icon: { ios: "arrow.counterclockwise", android: "replay", web: "replay" },
+              trailing: "none",
+              onPress: resetOnboarding,
+            },
+          ]}
+        />
+      )}
     </ScrollView>
   );
 }

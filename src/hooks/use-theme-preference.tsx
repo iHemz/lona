@@ -42,3 +42,19 @@ export function ThemePreferenceProvider({ children }: { children: ReactNode }) {
 export function useThemePreference(): ThemePreferenceContextValue {
   return useContext(ThemePreferenceContext);
 }
+
+/** Forces a colour scheme for everything inside, e.g. a screen that's always dark by design. */
+export function ColorSchemeOverride({
+  scheme,
+  children,
+}: {
+  scheme: Exclude<ThemePreference, "system">;
+  children: ReactNode;
+}) {
+  const parent = useThemePreference();
+  return (
+    <ThemePreferenceContext.Provider value={{ ...parent, preference: scheme }}>
+      {children}
+    </ThemePreferenceContext.Provider>
+  );
+}

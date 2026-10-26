@@ -25,6 +25,8 @@ export type Loan = {
   createdOn: IsoDate;
   /** One entry for a single repayment, several for an instalment plan. Sums to the principal. */
   schedule: Instalment[];
+  /** When the final repayment landed; set once the loan is fully repaid. */
+  settledOn?: IsoDate;
 };
 
 /** Days ahead within which a payment is flagged as "due soon". */
@@ -58,6 +60,13 @@ function unpaidInstalments(loan: Loan): ScheduledInstalment[] {
   return withRunningTotals(loan.schedule).filter(
     (instalment) => instalment.endMinor > loan.repaidMinor,
   );
+}
+
+/** Instalments fully covered by repayments so far. */
+export function paidInstalmentCount(loan: Loan): number {
+  return withRunningTotals(loan.schedule).filter(
+    (instalment) => instalment.endMinor <= loan.repaidMinor,
+  ).length;
 }
 
 export type NextPayment = {

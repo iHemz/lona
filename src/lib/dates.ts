@@ -45,6 +45,15 @@ export function formatShortDate(date: IsoDate): string {
   }).format(toUtcMs(date));
 }
 
+/** "May 2026" */
+export function formatMonthYear(date: IsoDate): string {
+  return new Intl.DateTimeFormat(DEFAULT_LOCALE, {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(toUtcMs(date));
+}
+
 /** "Fri 12 July" */
 export function formatWeekdayDate(date: IsoDate): string {
   return new Intl.DateTimeFormat(DEFAULT_LOCALE, {

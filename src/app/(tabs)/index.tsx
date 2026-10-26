@@ -9,14 +9,15 @@ import { HomeHeader } from "@/components/home/home-header";
 import { RecentLoans } from "@/components/home/recent-loans";
 import { Spacing } from "@/constants/theme";
 import { useHomeDashboard } from "@/hooks/use-home-dashboard";
+import { useAccount } from "@/hooks/use-ledger";
 import { useScreenTopPadding } from "@/hooks/use-screen-top-padding";
 import { useThemeColors } from "@/hooks/use-theme";
-import { MOCK_CURRENT_USER } from "@/lib/mock-data";
 
 export default function HomeScreen() {
   const colors = useThemeColors();
   const topPadding = useScreenTopPadding();
   const router = useRouter();
+  const account = useAccount();
   const { owedToYou, youOwe, featured, recentLoans } = useHomeDashboard();
 
   return (
@@ -25,7 +26,11 @@ export default function HomeScreen() {
       contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={[styles.content, { paddingTop: topPadding }]}
     >
-      <HomeHeader user={MOCK_CURRENT_USER} />
+      <HomeHeader
+        user={account.user}
+        onOpenProfile={() => router.push("/profile")}
+        onOpenSettings={() => router.push("/settings")}
+      />
       <BalanceSummary owedToYou={owedToYou} youOwe={youOwe} />
       <HomeActions />
       {featured ? (

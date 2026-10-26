@@ -36,6 +36,7 @@ const light = {
   summaryBorder: "#FFFFFF",
   chipCountSurface: "#ECECF0",
   warningSurface: "#FDF3E4",
+  switchThumb: "#FFFFFF",
   unreadSurface: "#F4F7FC",
 };
 
@@ -78,6 +79,7 @@ const dark: ThemeColors = {
   summaryBorder: "#2C2C2E",
   chipCountSurface: "#3A3A3C",
   warningSurface: "#3A2A12",
+  switchThumb: "#FFFFFF",
   unreadSurface: "#18202C",
 };
 

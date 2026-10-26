@@ -1,7 +1,8 @@
+import type { Account } from "@/lib/account";
 import type { ActivityEvent } from "@/lib/activity";
 import { todayIsoDate, type IsoDate } from "@/lib/dates";
 import type { Friend, Loan } from "@/lib/loans";
-import { createMockLedger } from "@/lib/mock-data";
+import { createMockLedger, MOCK_ACCOUNT } from "@/lib/mock-data";
 import type { CurrencyCode } from "@/lib/money";
 
 // TODO: replace with the user's home currency and real data once there's a backend.
@@ -36,4 +37,9 @@ export function useLedger(): Ledger {
   const today = todayIsoDate();
   const { friends, loans, activity } = createMockLedger(today);
   return { friends, loans, activity, today, currency: HOME_CURRENCY };
+}
+
+/** The signed-in user's account. Mock data for now. */
+export function useAccount(): Account {
+  return MOCK_ACCOUNT;
 }

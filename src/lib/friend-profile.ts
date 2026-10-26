@@ -99,17 +99,20 @@ export function settledLoanItems(loans: Loan[]): SettledLoanItem[] {
 }
 
 export type RepaymentRecord = {
-  /** Loans you lent them that they've fully repaid, and when it's known. */
+  /** Fully repaid loans in the measured direction whose settle date is known. */
   repaid: number;
   onTime: number;
   /** 0–1, or null when nothing has been repaid yet. */
   onTimeRate: number | null;
 };
 
-/** How reliably the friend has repaid what you lent them: settled by the final due date. */
-export function repaymentRecord(loans: Loan[]): RepaymentRecord {
+/**
+ * How reliably loans in one direction were repaid: settled by the final due date.
+ * `lent` measures a friend repaying you; `borrowed` measures you repaying others.
+ */
+export function repaymentRecord(loans: Loan[], direction: LoanDirection): RepaymentRecord {
   const repaid = loans.filter(
-    (loan) => loan.direction === "lent" && isSettled(loan) && loan.settledOn,
+    (loan) => loan.direction === direction && isSettled(loan) && loan.settledOn,
   );
   const onTime = repaid.filter((loan) => {
     const finalDue = loan.schedule.at(-1)?.dueDate;

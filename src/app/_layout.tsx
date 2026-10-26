@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
+import { HomeTourProvider } from "@/hooks/use-home-tour";
 import { OnboardingProvider, useOnboarding } from "@/hooks/use-onboarding";
 import { PaymentMethodsProvider, usePaymentMethods } from "@/hooks/use-payment-methods";
 import { SetupProvider, useSetup } from "@/hooks/use-setup";
@@ -17,7 +18,9 @@ export default function RootLayout() {
       <OnboardingProvider>
         <SetupProvider>
           <PaymentMethodsProvider>
-            <RootStack />
+            <HomeTourProvider>
+              <RootStack />
+            </HomeTourProvider>
           </PaymentMethodsProvider>
         </SetupProvider>
       </OnboardingProvider>
@@ -47,6 +50,14 @@ function RootStack() {
         <Stack.Screen name="settings" options={{ presentation: "modal" }} />
         <Stack.Screen name="verify-id" />
         <Stack.Screen name="link-payment" />
+        <Stack.Screen
+          name="reminders"
+          options={{ presentation: "transparentModal", animation: "fade" }}
+        />
+        <Stack.Screen
+          name="setup-complete"
+          options={{ animation: "fade", gestureEnabled: false }}
+        />
       </Stack.Protected>
       <Stack.Protected guard={!hasOnboarded}>
         <Stack.Screen name="welcome" options={{ animation: "fade" }} />

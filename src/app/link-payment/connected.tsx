@@ -1,3 +1,5 @@
+import { useRouter } from "expo-router";
+
 import { LinkedMethods } from "@/components/payment/linked-methods";
 import { SetupChecklist } from "@/components/setup/setup-checklist";
 import { SetupCompleteLayout } from "@/components/setup/setup-complete-layout";
@@ -8,6 +10,7 @@ import { usePaymentMethods } from "@/hooks/use-payment-methods";
 import { useSetup } from "@/hooks/use-setup";
 
 export default function PaymentConnectedScreen() {
+  const router = useRouter();
   const { card, bank } = usePaymentMethods();
   const { completed } = useSetup();
   const close = useCloseModal("/");
@@ -20,10 +23,10 @@ export default function PaymentConnectedScreen() {
       subtitle="Nothing has been charged."
       actions={
         <>
-          {/* Reminders setup is the next flow to build. */}
           <Button
             label="Turn on reminders"
             icon={{ ios: "alarm", android: "alarm", web: "alarm" }}
+            onPress={() => router.replace("/reminders")}
           />
           <Button label="Later" variant="secondary" onPress={close} />
         </>

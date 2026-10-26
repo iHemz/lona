@@ -1,5 +1,6 @@
 import { SymbolView, type SymbolViewProps } from "expo-symbols";
-import { Pressable, StyleSheet, type ColorValue } from "react-native";
+import type { Ref } from "react";
+import { Pressable, StyleSheet, type ColorValue, type View } from "react-native";
 
 import { TouchTarget } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
@@ -13,6 +14,7 @@ type IconButtonProps = {
   tintColor?: ColorValue;
   /** `surface` is the outlined default; `primary` is a filled call to action. */
   variant?: "surface" | "primary";
+  ref?: Ref<View>;
 };
 
 export function IconButton({
@@ -22,12 +24,15 @@ export function IconButton({
   size = TouchTarget,
   tintColor,
   variant = "surface",
+  ref,
 }: IconButtonProps) {
   const colors = useThemeColors();
   const isPrimary = variant === "primary";
 
   return (
     <Pressable
+      ref={ref}
+      collapsable={false}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       onPress={onPress}

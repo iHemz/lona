@@ -1,18 +1,15 @@
 import { SymbolView } from "expo-symbols";
 import { useState } from "react";
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
-import Animated, { FadeIn, SlideInDown } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { BankLogo } from "@/components/payment/bank-logo";
+import { BottomSheet } from "@/components/ui/bottom-sheet";
 import { Button } from "@/components/ui/button";
 import { IconButton } from "@/components/ui/icon-button";
 import { FontSize, Radius, Spacing, TouchTarget } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
 import { maskedNumber } from "@/lib/account";
 import type { Bank } from "@/lib/banks";
-
-const SHEET_RADIUS = 28;
 
 const TERMS: { text: string; isAllowed: boolean }[] = [
   { text: "Confirm the account is yours.", isAllowed: true },
@@ -40,26 +37,12 @@ export function BankReviewSheet({
   onClose,
 }: BankReviewSheetProps) {
   const colors = useThemeColors();
-  const insets = useSafeAreaInsets();
   const [hasAgreed, setHasAgreed] = useState(false);
 
   return (
-    <Modal visible={bank !== null} transparent animationType="none" onRequestClose={onClose}>
-      <Animated.View
-        entering={FadeIn.duration(200)}
-        style={[StyleSheet.absoluteFill, { backgroundColor: colors.scrim }]}
-      >
-        <Pressable accessibilityLabel="Close" style={StyleSheet.absoluteFill} onPress={onClose} />
-      </Animated.View>
+    <BottomSheet visible={bank !== null} onClose={onClose}>
       {bank && (
-        <Animated.View
-          entering={SlideInDown.duration(300)}
-          accessibilityViewIsModal
-          style={[
-            styles.sheet,
-            { backgroundColor: colors.background, paddingBottom: insets.bottom + Spacing.lg },
-          ]}
-        >
+        <>
           <ScrollView contentContainerStyle={styles.content}>
             <View style={styles.header}>
               <View style={styles.headerText}>
@@ -183,24 +166,15 @@ export function BankReviewSheet({
               isLoading={isConnecting}
             />
           </View>
-        </Animated.View>
+        </>
       )}
-    </Modal>
+    </BottomSheet>
   );
 }
 
 const styles = StyleSheet.create({
-  sheet: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
-    maxHeight: "88%",
-    borderTopLeftRadius: SHEET_RADIUS,
-    borderTopRightRadius: SHEET_RADIUS,
-    paddingTop: Spacing.xxl,
-  },
   content: {
+    paddingTop: Spacing.sm,
     paddingHorizontal: Spacing.xl,
     gap: Spacing.lg,
   },

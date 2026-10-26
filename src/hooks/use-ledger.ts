@@ -1,3 +1,4 @@
+import type { ActivityEvent } from "@/lib/activity";
 import { todayIsoDate, type IsoDate } from "@/lib/dates";
 import type { Friend, Loan } from "@/lib/loans";
 import { createMockLedger } from "@/lib/mock-data";
@@ -9,6 +10,7 @@ const HOME_CURRENCY = "GBP";
 export type Ledger = {
   friends: Friend[];
   loans: Loan[];
+  activity: ActivityEvent[];
   today: IsoDate;
   currency: CurrencyCode;
 };
@@ -20,17 +22,18 @@ export type FriendLedger = Omit<Ledger, "friends"> & {
 
 /** One friend and only the loans you share with them. */
 export function useFriendLedger(friendId: string): FriendLedger {
-  const { friends, loans, ...rest } = useLedger();
+  const { friends, loans, activity, ...rest } = useLedger();
   return {
     ...rest,
     friend: friends.find((candidate) => candidate.id === friendId) ?? null,
     loans: loans.filter((loan) => loan.friendId === friendId),
+    activity: activity.filter((event) => event.friendId === friendId),
   };
 }
 
 /** The current user's friends and loans. Mock data for now. */
 export function useLedger(): Ledger {
   const today = todayIsoDate();
-  const { friends, loans } = createMockLedger(today);
-  return { friends, loans, today, currency: HOME_CURRENCY };
+  const { friends, loans, activity } = createMockLedger(today);
+  return { friends, loans, activity, today, currency: HOME_CURRENCY };
 }

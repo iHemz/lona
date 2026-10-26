@@ -2,15 +2,19 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { FontSize, Radius, Spacing, TouchTarget } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
-import type { LoanTab } from "@/lib/loans-list";
 
-type LoanTabChipsProps = {
-  tabs: { tab: LoanTab; label: string; count: number }[];
-  selected: LoanTab;
-  onSelect: (tab: LoanTab) => void;
+type FilterChipsProps<T extends string> = {
+  options: { value: T; label: string; count: number }[];
+  selected: T;
+  onSelect: (value: T) => void;
 };
 
-export function LoanTabChips({ tabs, selected, onSelect }: LoanTabChipsProps) {
+/** Single-select filter chips with counts, announced as tabs. */
+export function FilterChips<T extends string>({
+  options,
+  selected,
+  onSelect,
+}: FilterChipsProps<T>) {
   const colors = useThemeColors();
 
   return (
@@ -21,15 +25,15 @@ export function LoanTabChips({ tabs, selected, onSelect }: LoanTabChipsProps) {
       accessibilityRole="tablist"
       contentContainerStyle={styles.row}
     >
-      {tabs.map(({ tab, label, count }) => {
-        const isSelected = tab === selected;
+      {options.map(({ value, label, count }) => {
+        const isSelected = value === selected;
         return (
           <Pressable
-            key={tab}
+            key={value}
             accessibilityRole="tab"
             accessibilityState={{ selected: isSelected }}
             accessibilityLabel={`${label}, ${count}`}
-            onPress={() => onSelect(tab)}
+            onPress={() => onSelect(value)}
             style={({ pressed }) => [
               styles.chip,
               isSelected

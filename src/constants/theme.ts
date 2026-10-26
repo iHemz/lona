@@ -35,6 +35,8 @@ const light = {
   summarySurface: "#ECEEF2",
   summaryBorder: "#FFFFFF",
   chipCountSurface: "#ECECF0",
+  warningSurface: "#FDF3E4",
+  unreadSurface: "#F4F7FC",
 };
 
 export type ThemeColors = typeof light;
@@ -75,6 +77,8 @@ const dark: ThemeColors = {
   summarySurface: "#1C1C1E",
   summaryBorder: "#2C2C2E",
   chipCountSurface: "#3A3A3C",
+  warningSurface: "#3A2A12",
+  unreadSurface: "#18202C",
 };
 
 export const Colors = { light, dark };

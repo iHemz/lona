@@ -4,10 +4,10 @@ import { FlatList, KeyboardAvoidingView, Platform, StyleSheet, Text, View } from
 import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { FRIEND_ROW_SEPARATOR_INSET, FriendLoanRow } from "@/components/home/friend-loan-row";
-import { LoanTabChips } from "@/components/loans/loan-tab-chips";
 import { LoansEmpty } from "@/components/loans/loans-empty";
 import { LoansSummaryCard } from "@/components/loans/loans-summary-card";
 import { BUTTON_HEIGHT } from "@/components/ui/button";
+import { FilterChips } from "@/components/ui/filter-chips";
 import { GroupedRow, GroupedSeparator } from "@/components/ui/grouped-list";
 import { IconButton } from "@/components/ui/icon-button";
 import { SearchBar } from "@/components/ui/search-bar";
@@ -66,9 +66,9 @@ function LoansScreenContent() {
             <Text accessibilityRole="header" style={[styles.title, { color: colors.text }]}>
               Loans
             </Text>
-            <LoanTabChips
-              tabs={LOAN_TABS.map(({ tab, label }) => ({
-                tab,
+            <FilterChips
+              options={LOAN_TABS.map(({ tab, label }) => ({
+                value: tab,
                 label,
                 count: tabs[tab].rows.length,
               }))}

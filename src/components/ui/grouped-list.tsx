@@ -46,6 +46,8 @@ const styles = StyleSheet.create({
   slice: {
     borderLeftWidth: StyleSheet.hairlineWidth,
     borderRightWidth: StyleSheet.hairlineWidth,
+    // Keeps row highlights (pressed, unread) inside the rounded first/last corners.
+    overflow: "hidden",
   },
   first: {
     borderTopWidth: StyleSheet.hairlineWidth,

@@ -2,7 +2,9 @@ import { Fragment } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { FriendLoanRow } from "@/components/home/friend-loan-row";
+import { LoanStackIllustration } from "@/components/home/loan-stack-illustration";
 import { DEFAULT_AVATAR_SIZE } from "@/components/ui/avatar";
+import { EmptyState } from "@/components/ui/empty-state";
 import { FontSize, Radius, Spacing } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
 import type { FriendLoanSummary } from "@/lib/loans";
@@ -17,6 +19,7 @@ type RecentLoansProps = {
 
 export function RecentLoans({ summaries, onSeeAll, onOpenFriend }: RecentLoansProps) {
   const colors = useThemeColors();
+  const isEmpty = summaries.length === 0;
 
   return (
     <View style={styles.section}>
@@ -24,15 +27,17 @@ export function RecentLoans({ summaries, onSeeAll, onOpenFriend }: RecentLoansPr
         <Text accessibilityRole="header" style={[styles.title, { color: colors.textSecondary }]}>
           Recent loans
         </Text>
-        <Pressable
-          accessibilityRole="link"
-          accessibilityLabel="See all loans"
-          onPress={onSeeAll}
-          hitSlop={12}
-          style={({ pressed }) => pressed && styles.pressed}
-        >
-          <Text style={[styles.seeAll, { color: colors.link }]}>See all</Text>
-        </Pressable>
+        {!isEmpty && (
+          <Pressable
+            accessibilityRole="link"
+            accessibilityLabel="See all loans"
+            onPress={onSeeAll}
+            hitSlop={12}
+            style={({ pressed }) => pressed && styles.pressed}
+          >
+            <Text style={[styles.seeAll, { color: colors.link }]}>See all</Text>
+          </Pressable>
+        )}
       </View>
 
       <View
@@ -41,10 +46,19 @@ export function RecentLoans({ summaries, onSeeAll, onOpenFriend }: RecentLoansPr
           { backgroundColor: colors.surface, borderColor: colors.surfaceBorder },
         ]}
       >
-        {summaries.length === 0 ? (
-          <Text style={[styles.empty, { color: colors.textSecondary }]}>
-            No active loans yet. Loans you make to friends will show up here.
-          </Text>
+        {isEmpty ? (
+          <View style={styles.empty}>
+            <EmptyState
+              illustration={<LoanStackIllustration />}
+              title="No recent loan"
+              body="Loans you make or receive will show up here, newest first."
+              action={{
+                label: "View loans",
+                icon: { ios: "square.stack.3d.up", android: "stacks", web: "stacks" },
+                onPress: onSeeAll,
+              }}
+            />
+          </View>
         ) : (
           summaries.map((summary, index) => (
             <Fragment key={`${summary.friend.id}:${summary.principal.currency}`}>
@@ -92,9 +106,8 @@ const styles = StyleSheet.create({
     marginLeft: Spacing.lg + DEFAULT_AVATAR_SIZE + Spacing.md,
   },
   empty: {
-    fontSize: FontSize.subhead,
-    padding: Spacing.xl,
-    textAlign: "center",
+    paddingHorizontal: Spacing.xl,
+    paddingVertical: Spacing.xxxl,
   },
   pressed: {
     opacity: 0.6,

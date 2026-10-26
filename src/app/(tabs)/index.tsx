@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { BalanceSummary } from "@/components/home/balance-summary";
 import { FeaturedLoanCard } from "@/components/home/featured-loan-card";
+import { FeaturedLoanEmpty } from "@/components/home/featured-loan-empty";
 import { HomeActions } from "@/components/home/home-actions";
 import { HomeHeader } from "@/components/home/home-header";
 import { RecentLoans } from "@/components/home/recent-loans";
@@ -34,12 +35,14 @@ export default function HomeScreen() {
       <HomeHeader user={MOCK_CURRENT_USER} />
       <BalanceSummary owedToYou={owedToYou} youOwe={youOwe} />
       <HomeActions />
-      {featured && (
+      {featured ? (
         <FeaturedLoanCard
           loan={featured.loan}
           friend={featured.friend}
           isOverdue={featured.isOverdue}
         />
+      ) : (
+        <FeaturedLoanEmpty />
       )}
       <RecentLoans summaries={recentLoans} onSeeAll={() => router.navigate("/loans")} />
     </ScrollView>

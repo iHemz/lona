@@ -53,6 +53,12 @@
           "cameraPermission": false,
           "microphonePermission": false
         }
+      ],
+      [
+        "expo-contacts",
+        {
+          "contactsPermission": "This lets you find friends already on Lona and offer a loan to anyone in your phone book."
+        }
       ]
     ],
     "experiments": {

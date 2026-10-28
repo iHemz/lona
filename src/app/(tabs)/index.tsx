@@ -105,7 +105,15 @@ export default function HomeScreen() {
         )}
       </ScrollView>
 
-      <NewLoanSheet visible={isNewLoanOpen} onClose={() => setIsNewLoanOpen(false)} />
+      <NewLoanSheet
+        visible={isNewLoanOpen}
+        onClose={() => setIsNewLoanOpen(false)}
+        canMoveMoney={canMoveMoney(completed)}
+        onOfferToLend={() => {
+          setIsNewLoanOpen(false);
+          router.push("/lend");
+        }}
+      />
       <CoachMarks steps={tourSteps} visible={showTour} onFinish={tour.markSeen} />
     </>
   );

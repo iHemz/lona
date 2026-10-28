@@ -1,59 +1,24 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-
-import { Avatar, DEFAULT_AVATAR_SIZE } from "@/components/ui/avatar";
-import { FontSize, Spacing } from "@/constants/theme";
-import { useThemeColors } from "@/hooks/use-theme";
+import { PERSON_ROW_INSET, PersonRow } from "@/components/ui/person-row";
 import { formatTimeAgo, type IsoDate } from "@/lib/dates";
 import type { Friend } from "@/lib/loans";
 
-export const FRIEND_ROW_INSET = Spacing.lg + DEFAULT_AVATAR_SIZE + Spacing.md;
+export const FRIEND_ROW_INSET = PERSON_ROW_INSET;
 
 type FriendRowProps = {
   friend: Friend;
   today: IsoDate;
   onPress?: () => void;
+  showChevron?: boolean;
 };
 
-export function FriendRow({ friend, today, onPress }: FriendRowProps) {
-  const colors = useThemeColors();
-  const joined = `Joined ${formatTimeAgo(friend.joinedOn, today)}`;
-
+export function FriendRow({ friend, today, onPress, showChevron }: FriendRowProps) {
   return (
-    <Pressable
-      accessibilityRole={onPress ? "button" : undefined}
-      accessibilityLabel={`${friend.name}, ${joined}`}
+    <PersonRow
+      name={friend.name}
+      detail={`Joined ${formatTimeAgo(friend.joinedOn, today)}`}
+      colorKey={friend.id}
       onPress={onPress}
-      disabled={!onPress}
-      style={({ pressed }) => [styles.row, pressed && { backgroundColor: colors.background }]}
-    >
-      <Avatar name={friend.name} colorKey={friend.id} />
-      <View style={styles.details}>
-        <Text style={[styles.name, { color: colors.text }]} numberOfLines={1}>
-          {friend.name}
-        </Text>
-        <Text style={[styles.joined, { color: colors.textSecondary }]}>{joined}</Text>
-      </View>
-    </Pressable>
+      showChevron={showChevron}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: Spacing.md,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md + 2,
-  },
-  details: {
-    flex: 1,
-    gap: 2,
-  },
-  name: {
-    fontSize: FontSize.body,
-    fontWeight: "600",
-  },
-  joined: {
-    fontSize: FontSize.footnote,
-  },
-});

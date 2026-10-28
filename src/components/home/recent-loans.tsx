@@ -1,11 +1,12 @@
 import { Fragment } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { FRIEND_ROW_SEPARATOR_INSET, FriendLoanRow } from "@/components/home/friend-loan-row";
 import { CardStackIllustration } from "@/components/ui/card-stack-illustration";
 import { EmptyState } from "@/components/ui/empty-state";
+import { SectionHeader } from "@/components/ui/section-header";
 import { LOAN_STACK_ICON } from "@/constants/icons";
-import { FontSize, Radius, Spacing } from "@/constants/theme";
+import { Radius, Spacing } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
 import type { FriendLoanSummary } from "@/lib/loans";
 
@@ -23,22 +24,14 @@ export function RecentLoans({ summaries, onSeeAll, onOpenFriend }: RecentLoansPr
 
   return (
     <View style={styles.section}>
-      <View style={styles.header}>
-        <Text accessibilityRole="header" style={[styles.title, { color: colors.textSecondary }]}>
-          Recent loans
-        </Text>
-        {!isEmpty && (
-          <Pressable
-            accessibilityRole="link"
-            accessibilityLabel="See all loans"
-            onPress={onSeeAll}
-            hitSlop={12}
-            style={({ pressed }) => pressed && styles.pressed}
-          >
-            <Text style={[styles.seeAll, { color: colors.link }]}>See all</Text>
-          </Pressable>
-        )}
-      </View>
+      <SectionHeader
+        title="Recent loans"
+        action={
+          isEmpty
+            ? undefined
+            : { label: "See all", accessibilityLabel: "See all loans", onPress: onSeeAll }
+        }
+      />
 
       <View
         style={[
@@ -81,21 +74,6 @@ const styles = StyleSheet.create({
   section: {
     gap: Spacing.md,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  title: {
-    fontSize: FontSize.footnote,
-    fontWeight: "600",
-    letterSpacing: 0.6,
-    textTransform: "uppercase",
-  },
-  seeAll: {
-    fontSize: FontSize.body,
-    fontWeight: "600",
-  },
   card: {
     borderRadius: Radius.lg,
     borderWidth: StyleSheet.hairlineWidth,
@@ -108,8 +86,5 @@ const styles = StyleSheet.create({
   empty: {
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.xxxl,
-  },
-  pressed: {
-    opacity: 0.6,
   },
 });

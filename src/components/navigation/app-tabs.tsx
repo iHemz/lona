@@ -1,4 +1,4 @@
-import { NativeTabs } from "expo-router/unstable-native-tabs";
+import { NativeTabs } from "expo-router/native-tabs";
 
 import { APP_TABS } from "@/constants/tabs";
 import { useTabBadges } from "@/hooks/use-tab-badges";

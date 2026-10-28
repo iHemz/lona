@@ -1,4 +1,4 @@
-import type { Ref } from "react";
+import type { ComponentRef, Ref } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { BUTTON_HEIGHT, Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ type HomeActionsProps = {
   onRequestLoan?: () => void;
   onMore?: () => void;
   /** Lets the Home tour point at the "•••" button. */
-  moreRef?: Ref<View>;
+  moreRef?: Ref<ComponentRef<typeof View>>;
 };
 
 export function HomeActions({ canRequestLoan, onRequestLoan, onMore, moreRef }: HomeActionsProps) {

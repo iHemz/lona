@@ -1,5 +1,5 @@
 import { useIsFocused, useRouter } from "expo-router";
-import { useRef, useState } from "react";
+import { useRef, useState, type ComponentRef } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 
 import { BalanceSummary } from "@/components/home/balance-summary";
@@ -31,8 +31,8 @@ export default function HomeScreen() {
   const { completed } = useSetup();
   const tour = useHomeTour();
   const [isNewLoanOpen, setIsNewLoanOpen] = useState(false);
-  const moreRef = useRef<View>(null);
-  const featuredRef = useRef<View>(null);
+  const moreRef = useRef<ComponentRef<typeof View>>(null);
+  const featuredRef = useRef<ComponentRef<typeof View>>(null);
 
   const setupComplete = isSetupComplete(completed);
   // The first time Home is shown after setup, point out the two less obvious things.

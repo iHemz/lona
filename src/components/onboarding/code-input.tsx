@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type ComponentRef } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 import { FontSize, Radius, Spacing } from "@/constants/theme";
@@ -19,7 +19,7 @@ type CodeInputProps = {
  */
 export function CodeInput({ length, value, onChange, hasError = false }: CodeInputProps) {
   const colors = useThemeColors();
-  const inputRef = useRef<TextInput>(null);
+  const inputRef = useRef<ComponentRef<typeof TextInput>>(null);
   const [isFocused, setIsFocused] = useState(false);
   const activeIndex = Math.min(value.length, length - 1);
 

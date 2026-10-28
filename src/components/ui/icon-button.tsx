@@ -1,5 +1,5 @@
 import { SymbolView, type SymbolViewProps } from "expo-symbols";
-import type { Ref } from "react";
+import type { ComponentRef, Ref } from "react";
 import { Pressable, StyleSheet, type ColorValue, type View } from "react-native";
 
 import { TouchTarget } from "@/constants/theme";
@@ -14,7 +14,7 @@ type IconButtonProps = {
   tintColor?: ColorValue;
   /** `surface` is the outlined default; `primary` is a filled call to action. */
   variant?: "surface" | "primary";
-  ref?: Ref<View>;
+  ref?: Ref<ComponentRef<typeof View>>;
 };
 
 export function IconButton({

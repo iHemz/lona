@@ -1,4 +1,4 @@
-import { useEffect, useState, type RefObject } from "react";
+import { useEffect, useState, type ComponentRef, type RefObject } from "react";
 import { Modal, Pressable, StyleSheet, Text, View, useWindowDimensions } from "react-native";
 import Svg, { Path } from "react-native-svg";
 
@@ -8,7 +8,7 @@ import { useThemeColors } from "@/hooks/use-theme";
 
 export type CoachMarkStep = {
   /** The element to highlight. Give it `collapsable={false}` so it can be measured on Android. */
-  target: RefObject<View | null>;
+  target: RefObject<ComponentRef<typeof View> | null>;
   title: string;
   body: string;
 };

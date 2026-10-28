@@ -1,5 +1,5 @@
 import { SymbolView } from "expo-symbols";
-import { useRef, useState } from "react";
+import { useRef, useState, type ComponentRef } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
 import { CardPreview } from "@/components/payment/card-preview";
@@ -28,8 +28,8 @@ const EXPIRY_LENGTH = "MM/YY".length;
 export default function AddCardScreen() {
   const colors = useThemeColors();
   const { saveCard } = useSavePaymentMethod();
-  const expiryRef = useRef<TextInput>(null);
-  const cvcRef = useRef<TextInput>(null);
+  const expiryRef = useRef<ComponentRef<typeof TextInput>>(null);
+  const cvcRef = useRef<ComponentRef<typeof TextInput>>(null);
 
   const [number, setNumber] = useState("");
   const [expiry, setExpiry] = useState("");

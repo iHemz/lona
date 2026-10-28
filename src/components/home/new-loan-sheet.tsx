@@ -17,12 +17,20 @@ type NewLoanOption = {
 type NewLoanSheetProps = {
   visible: boolean;
   onClose: () => void;
+  /** False until setup is finished; the options are shown but can't be used yet. */
+  canMoveMoney: boolean;
   onOfferToLend?: () => void;
   onSettleUp?: () => void;
 };
 
 /** The "•••" menu next to Request loan: the other ways to start moving money. */
-export function NewLoanSheet({ visible, onClose, onOfferToLend, onSettleUp }: NewLoanSheetProps) {
+export function NewLoanSheet({
+  visible,
+  onClose,
+  canMoveMoney,
+  onOfferToLend,
+  onSettleUp,
+}: NewLoanSheetProps) {
   const colors = useThemeColors();
 
   const options: NewLoanOption[] = [
@@ -52,7 +60,9 @@ export function NewLoanSheet({ visible, onClose, onOfferToLend, onSettleUp }: Ne
             New loan
           </Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            Terms are clearly agreed up front, so there’s nothing to chase later.
+            {canMoveMoney
+              ? "Terms are clearly agreed up front, so there’s nothing to chase later."
+              : "Finish setting up your account to lend or settle up."}
           </Text>
         </View>
         {options.map((option) => (
@@ -60,11 +70,14 @@ export function NewLoanSheet({ visible, onClose, onOfferToLend, onSettleUp }: Ne
             key={option.title}
             accessibilityRole="button"
             accessibilityLabel={`${option.title}, ${option.description}`}
+            accessibilityState={{ disabled: !canMoveMoney }}
+            disabled={!canMoveMoney}
             onPress={option.onPress}
             style={({ pressed }) => [
               styles.option,
               { backgroundColor: colors.surface },
               pressed && styles.pressed,
+              !canMoveMoney && styles.disabled,
             ]}
           >
             <View style={[styles.icon, { backgroundColor: colors.linkSurface }]}>
@@ -114,6 +127,9 @@ const styles = StyleSheet.create({
   },
   pressed: {
     opacity: 0.7,
+  },
+  disabled: {
+    opacity: 0.4,
   },
   icon: {
     width: ICON_SIZE,

@@ -1,5 +1,5 @@
 import { SymbolView } from "expo-symbols";
-import { useState, type Ref } from "react";
+import { useState, type ComponentRef, type Ref } from "react";
 import { StyleSheet, Text, TextInput, View, type TextInputProps } from "react-native";
 
 import { FontSize, Radius, Spacing, TouchTarget } from "@/constants/theme";
@@ -9,7 +9,7 @@ type FieldPillProps = Omit<TextInputProps, "style"> & {
   /** Shown before the value, e.g. "Card No:". */
   label: string;
   hasError?: boolean;
-  ref?: Ref<TextInput>;
+  ref?: Ref<ComponentRef<typeof TextInput>>;
 };
 
 /** A pill that is itself the input: tap it to change the value ("Card No: 4242…"). */

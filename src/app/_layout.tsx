@@ -50,6 +50,7 @@ function RootStack() {
         <Stack.Screen name="settings" options={{ presentation: "modal" }} />
         <Stack.Screen name="verify-id" />
         <Stack.Screen name="link-payment" />
+        <Stack.Screen name="lend" />
         <Stack.Screen
           name="reminders"
           options={{ presentation: "transparentModal", animation: "fade" }}

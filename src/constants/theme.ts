@@ -40,6 +40,11 @@ const light = {
   scrim: "rgba(0, 0, 0, 0.35)",
   outlineBorder: "#C7C7CC",
   unreadSurface: "#F4F7FC",
+  // A debit card stays dark in both themes, like the physical card.
+  paymentCard: "#1C1C1E",
+  onPaymentCard: "#FFFFFF",
+  onPaymentCardSecondary: "#C7C7CC",
+  paymentCardChip: "#F5A524",
 };
 
 export type ThemeColors = typeof light;
@@ -85,6 +90,10 @@ const dark: ThemeColors = {
   scrim: "rgba(0, 0, 0, 0.6)",
   outlineBorder: "#636366",
   unreadSurface: "#18202C",
+  paymentCard: "#2C2C2E",
+  onPaymentCard: "#FFFFFF",
+  onPaymentCardSecondary: "#C7C7CC",
+  paymentCardChip: "#F5A524",
 };
 
 export const Colors = { light, dark };

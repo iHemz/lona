@@ -45,6 +45,22 @@ export function formatShortDate(date: IsoDate): string {
   }).format(toUtcMs(date));
 }
 
+/** "5 August 2026", or "5 Aug 2026" with `month: "short"`. */
+export function formatFullDate(date: IsoDate, month: "short" | "long" = "long"): string {
+  return new Intl.DateTimeFormat(DEFAULT_LOCALE, {
+    day: "numeric",
+    month,
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(toUtcMs(date));
+}
+
+/** Local midnight on `date`, e.g. to hand to a date picker. */
+export function isoDateToLocalDate(date: IsoDate): Date {
+  const [year = 1970, month = 1, day = 1] = date.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
+
 /** A moment in time, ISO 8601. Without an offset it's read as the device's local time. */
 export type IsoDateTime = string;
 

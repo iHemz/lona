@@ -11,7 +11,7 @@ type SuccessHeaderProps = {
   subtitle: string;
 };
 
-/** Green check, headline and a short line, for the end of a setup step. */
+/** Green check, headline and a short line, for the end of a flow. */
 export function SuccessHeader({ title, subtitle }: SuccessHeaderProps) {
   const colors = useThemeColors();
 

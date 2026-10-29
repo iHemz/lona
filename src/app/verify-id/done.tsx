@@ -2,8 +2,8 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 
 import { SetupChecklist } from "@/components/setup/setup-checklist";
-import { SetupCompleteLayout } from "@/components/setup/setup-complete-layout";
 import { Button } from "@/components/ui/button";
+import { SuccessLayout } from "@/components/ui/success-layout";
 import { useBackToClose } from "@/hooks/use-back-to-close";
 import { useCloseModal } from "@/hooks/use-close-modal";
 import { useSetup } from "@/hooks/use-setup";
@@ -31,7 +31,7 @@ export default function IdVerifiedScreen() {
   useBackToClose(close);
 
   return (
-    <SetupCompleteLayout
+    <SuccessLayout
       title="ID verified!"
       subtitle={`${elapsed ? `${elapsed} ` : ""}You won’t be asked again.`}
       actions={
@@ -46,6 +46,6 @@ export default function IdVerifiedScreen() {
       }
     >
       <SetupChecklist completed={completed} />
-    </SetupCompleteLayout>
+    </SuccessLayout>
   );
 }

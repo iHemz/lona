@@ -13,10 +13,12 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { StepHeading, StepNavBar } from "@/components/ui/step-header";
 import { FontSize, Spacing } from "@/constants/theme";
 import { useLedger } from "@/hooks/use-ledger";
+import { useLendDraft } from "@/hooks/use-lend-draft";
 import { usePhoneContacts } from "@/hooks/use-phone-contacts";
 import { useThemeColors } from "@/hooks/use-theme";
 import {
-  LEND_STEP_COUNT,
+  lendStepHeading,
+  recipientKey,
   recipientSections,
   type Recipient,
   type RecipientSection,
@@ -29,6 +31,7 @@ export default function ChooseFriendScreen() {
   const router = useRouter();
   const { friends, today } = useLedger();
   const phoneContacts = usePhoneContacts();
+  const { update } = useLendDraft();
   const [query, setQuery] = useState("");
   const [expanded, setExpanded] = useState<ReadonlySet<RecipientSectionKey>>(new Set());
 
@@ -41,14 +44,10 @@ export default function ChooseFriendScreen() {
 
   const expand = (key: RecipientSectionKey) => setExpanded((current) => new Set(current).add(key));
 
-  const choose = (recipient: Recipient) =>
-    router.push({
-      pathname: "/lend/amount",
-      params:
-        recipient.kind === "friend"
-          ? { name: recipient.friend.name, friendId: recipient.friend.id }
-          : { name: recipient.contact.name, phone: recipient.contact.phone },
-    });
+  const choose = (recipient: Recipient) => {
+    update({ recipient });
+    router.push("/lend/plan");
+  };
 
   const emptyMessage = (section: RecipientSection): string | null => {
     if (section.matchCount > 0) return null;
@@ -85,11 +84,7 @@ export default function ChooseFriendScreen() {
       <StepNavBar />
       <SectionList
         sections={sections}
-        keyExtractor={(recipient) =>
-          recipient.kind === "friend"
-            ? `friend-${recipient.friend.id}`
-            : `contact-${recipient.contact.id}`
-        }
+        keyExtractor={recipientKey}
         renderItem={({ item, index, section }) => (
           <GroupedRow index={index} count={section.data.length}>
             {item.kind === "friend" ? (
@@ -131,9 +126,7 @@ export default function ChooseFriendScreen() {
         ListHeaderComponent={
           <View style={styles.header}>
             <StepHeading
-              step={1}
-              stepCount={LEND_STEP_COUNT}
-              task="Choose friend"
+              {...lendStepHeading(1)}
               title="Who are you lending to?"
               subtitle="Pick a friend from Lona or your contacts."
             />

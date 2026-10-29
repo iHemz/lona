@@ -2,8 +2,8 @@ import { useRouter } from "expo-router";
 
 import { LinkedMethods } from "@/components/payment/linked-methods";
 import { SetupChecklist } from "@/components/setup/setup-checklist";
-import { SetupCompleteLayout } from "@/components/setup/setup-complete-layout";
 import { Button } from "@/components/ui/button";
+import { SuccessLayout } from "@/components/ui/success-layout";
 import { useBackToClose } from "@/hooks/use-back-to-close";
 import { useCloseModal } from "@/hooks/use-close-modal";
 import { usePaymentMethods } from "@/hooks/use-payment-methods";
@@ -18,7 +18,7 @@ export default function PaymentConnectedScreen() {
   useBackToClose(close);
 
   return (
-    <SetupCompleteLayout
+    <SuccessLayout
       title="You’re connected!"
       subtitle="Nothing has been charged."
       actions={
@@ -34,6 +34,6 @@ export default function PaymentConnectedScreen() {
     >
       <LinkedMethods card={card} bank={bank} />
       <SetupChecklist completed={completed} />
-    </SetupCompleteLayout>
+    </SuccessLayout>
   );
 }

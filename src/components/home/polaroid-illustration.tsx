@@ -5,9 +5,14 @@ import { StyleSheet, Text, View } from "react-native";
 import { Spacing } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
 
-const CAPTION = "Every loan gets a photo\nthat develops as it’s repaid.";
+const DEFAULT_CAPTION = "Every loan gets a photo\nthat develops as it’s repaid.";
 
-export function PolaroidIllustration() {
+type PolaroidIllustrationProps = {
+  /** Handwritten under the photo; a line break keeps it to two short lines. */
+  caption?: string;
+};
+
+export function PolaroidIllustration({ caption = DEFAULT_CAPTION }: PolaroidIllustrationProps) {
   const colors = useThemeColors();
   // Falls back to the system font until the handwriting font has loaded (or if it fails).
   const [fontLoaded] = useFonts({ Caveat_500Medium });
@@ -16,7 +21,7 @@ export function PolaroidIllustration() {
     <View
       accessible
       accessibilityRole="image"
-      accessibilityLabel={CAPTION.replace("\n", " ")}
+      accessibilityLabel={caption.replace("\n", " ")}
       style={[
         styles.paper,
         {
@@ -40,7 +45,7 @@ export function PolaroidIllustration() {
           fontLoaded ? styles.handwriting : styles.fallback,
         ]}
       >
-        {CAPTION}
+        {caption}
       </Text>
     </View>
   );

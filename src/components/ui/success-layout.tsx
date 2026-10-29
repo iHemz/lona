@@ -2,26 +2,21 @@ import type { ReactNode } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { SuccessHeader } from "@/components/setup/success-header";
+import { SuccessHeader } from "@/components/ui/success-header";
 import { Spacing } from "@/constants/theme";
 import { useThemeColors } from "@/hooks/use-theme";
 
-type SetupCompleteLayoutProps = {
+type SuccessLayoutProps = {
   title: string;
   subtitle: string;
-  /** Scrollable content under the header, e.g. what was linked and the checklist. */
+  /** Scrollable content under the header, e.g. what was linked or sent. */
   children: ReactNode;
   /** Pinned at the bottom, e.g. the next step and "Later". */
   actions: ReactNode;
 };
 
-/** The screen at the end of a setup step: success header, summary, next actions. */
-export function SetupCompleteLayout({
-  title,
-  subtitle,
-  children,
-  actions,
-}: SetupCompleteLayoutProps) {
+/** The screen at the end of a flow: success header, summary, next actions. */
+export function SuccessLayout({ title, subtitle, children, actions }: SuccessLayoutProps) {
   const colors = useThemeColors();
   const insets = useSafeAreaInsets();
 
